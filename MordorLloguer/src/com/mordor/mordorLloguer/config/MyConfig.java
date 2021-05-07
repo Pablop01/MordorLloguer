@@ -2,6 +2,7 @@ package com.mordor.mordorLloguer.config;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.Properties;
 
 public class MyConfig {
@@ -26,6 +27,16 @@ public class MyConfig {
 		
 	}
 	
+	public void setProperties(String driver, String URL, String name, String pass) {
+		
+		properties.setProperty("ORACLE_DB_DRIVER_CLASS", driver);
+		properties.setProperty("ORACLE_DB_URL", URL);
+		properties.setProperty("ORACLE_DB_USERNAME", name);
+		properties.setProperty("ORACLE_DB_PASSWORD", pass);
+		guardar();
+		
+	}
+	
 	public static MyConfig getInstance() {
 		return instancia;
 	}
@@ -46,5 +57,16 @@ public class MyConfig {
 		return properties.getProperty("ORACLE_DB_PASSWORD");
 	}
 	
+	public void guardar() {
+		
+		try(FileOutputStream fos = new FileOutputStream(new File(defaultFile))){
+			
+			properties.store(fos, "UTF-8");
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 }

@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
+import javax.swing.JOptionPane;
 
 public class OracleDataBase implements AlmacenDatosDB {
 
@@ -115,7 +116,9 @@ public class OracleDataBase implements AlmacenDatosDB {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
+			JOptionPane.showMessageDialog(null, "The database configuration is incorrect, You can change it in preferences", "ERROR", JOptionPane.ERROR_MESSAGE);
+			
 			e.printStackTrace();
 		}
 

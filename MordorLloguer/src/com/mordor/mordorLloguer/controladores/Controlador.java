@@ -23,6 +23,7 @@ import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.MyDataSourceOracle;
 import com.mordor.mordorLloguer.vistas.vistaLogin;
 import com.mordor.mordorLloguer.vistas.vistaPrincipal;
+import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaPreferencias;
 
 public class Controlador implements ActionListener {
@@ -30,6 +31,7 @@ public class Controlador implements ActionListener {
 	private vistaPrincipal vista;
 	private vistaLogin vistaLogin;
 	private vistaPreferencias vistaPreferencias;
+	private vistaTabla vistaTabla;
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
@@ -82,8 +84,37 @@ public class Controlador implements ActionListener {
 			login();
 		} else if (comando.equals("Preferences")) {
 			preferences();
+		} else if (comando.equals("Tabla")) {
+			mostrarTabla();
+		} else if(comando.equals("Save Preferences")) {
+			savePreferences();
 		}
 
+	}
+
+	private void savePreferences() {
+		
+		MyConfig.getInstance().setProperties(vistaPreferencias.getTxtFieldDriver().getText(), 
+				vistaPreferencias.getTxtFieldDireccion().getText(), 
+				vistaPreferencias.getTxtFieldUsuario().getText(), 
+				String.valueOf(vistaPreferencias.getPassfieldContraseña().getPassword()));
+		
+		JOptionPane.showMessageDialog(null, "Saved Correctly", "Saved Correctly", JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+
+	private void mostrarTabla() {
+		
+		vistaTabla frame = new vistaTabla();
+		ControladorTabla controlador = new ControladorTabla(modelo,frame);
+		controlador.go();
+		
+		if (!isOpen(frame)) {
+
+			addJInternalFrame(frame);
+			centrar(frame);
+			
+		}
 	}
 
 	static void addJInternalFrame(JInternalFrame jif) {
@@ -126,6 +157,9 @@ public class Controlador implements ActionListener {
 			rellenarCampos();
 			addJInternalFrame(vistaPreferencias);
 		}
+		
+		vistaPreferencias.getBtnGuardar().addActionListener(this);
+		vistaPreferencias.getBtnGuardar().setActionCommand("Save Preferences");
 
 	}
 

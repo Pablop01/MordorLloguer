@@ -15,6 +15,7 @@ public class vistaPreferencias extends JInternalFrame {
 	private JTextField txtFieldDireccion;
 	private JTextField txtFieldUsuario;
 	private JPasswordField passfieldContraseña;
+	private JButton btnGuardar;
 
 
 	/**
@@ -24,7 +25,7 @@ public class vistaPreferencias extends JInternalFrame {
 		setClosable(true);
 		setFrameIcon(new ImageIcon(vistaPreferencias.class.getResource("/com/mordor/mordorLloguer/assets/settings.png")));
 		setBounds(100, 100, 450, 261);
-		setTitle("Propiedades Base de Datos");
+		setTitle("DB Properties");
 		getContentPane().setLayout(new MigLayout("", "[][][][][grow]", "[][][][][][][][][][]"));
 		
 		JLabel lblDriver = new JLabel("Driver");
@@ -54,7 +55,7 @@ public class vistaPreferencias extends JInternalFrame {
 		passfieldContraseña = new JPasswordField();
 		getContentPane().add(passfieldContraseña, "cell 3 7 2 1,growx");
 		
-		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar = new JButton("Save");
 		getContentPane().add(btnGuardar, "cell 0 9 5 1,alignx center");
 
 	}
@@ -76,6 +77,10 @@ public class vistaPreferencias extends JInternalFrame {
 
 	public JPasswordField getPassfieldContraseña() {
 		return passfieldContraseña;
+	}
+
+	public JButton getBtnGuardar() {
+		return btnGuardar;
 	}
 	
 }
