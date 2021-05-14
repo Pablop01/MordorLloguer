@@ -37,20 +37,9 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 		return HEADER[column];
 	}
 
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-
-		switch (columnIndex) {
-		case 2:
-			return Date.class;
-		default:
-			return String.class;
-		}
-
-	}
 
 	@Override
-	public abstract T getValueAt(int row, int col);
+	public abstract Object getValueAt(int row, int col);
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {

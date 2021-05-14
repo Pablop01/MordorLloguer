@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import javax.sql.DataSource;
 import javax.swing.JOptionPane;
 
+import com.mordor.mordorLloguer.config.MyConfig;
+
 public class OracleDataBase implements AlmacenDatosDB {
 
 	public ArrayList<Empleado> getCustomEmpleados(String where) {
@@ -49,6 +51,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		return empleados;
 
 	}
+	
 
 	@Override
 	public ArrayList<Empleado> getEmpleados() {
@@ -101,7 +104,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 		boolean valido = false;
-		String query = "SELECT COUNT(*) FROM EMPLEADO WHERE DNI =? AND PASSWORD =? ";
+		String query = "SELECT COUNT(*) FROM EMPLEADO WHERE DNI=? AND PASSWORD=ENCRYPT_PASWD.encrypt_val(?) ";
 
 		try (Connection con = ds.getConnection(); PreparedStatement pstmt = con.prepareStatement(query);) {
 
@@ -116,10 +119,9 @@ public class OracleDataBase implements AlmacenDatosDB {
 			}
 
 		} catch (SQLException e) {
-			
+				
 			JOptionPane.showMessageDialog(null, "The database configuration is incorrect, You can change it in preferences", "ERROR", JOptionPane.ERROR_MESSAGE);
-			
-			e.printStackTrace();
+
 		}
 
 		return valido;

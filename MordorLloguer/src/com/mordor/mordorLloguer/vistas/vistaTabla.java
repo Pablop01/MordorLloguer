@@ -60,16 +60,16 @@ public class vistaTabla extends JInternalFrame {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(lblDirection)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(comboBoxDirection, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE))
+							.addComponent(comboBoxDirection, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE))
 						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 							.addGroup(groupLayout.createSequentialGroup()
 								.addComponent(btnAdd)
-								.addGap(18)
+								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(btnDelete)
-								.addGap(18)
+								.addPreferredGap(ComponentPlacement.RELATED)
 								.addComponent(btnClose))
 							.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 644, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(132, Short.MAX_VALUE))
+					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -87,10 +87,16 @@ public class vistaTabla extends JInternalFrame {
 						.addComponent(btnClose)
 						.addComponent(btnDelete)
 						.addComponent(btnAdd))
-					.addContainerGap(145, Short.MAX_VALUE))
+					.addContainerGap(41, Short.MAX_VALUE))
 		);
 		
 		table = new WebTable();
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.setRowHeight(25);
+		table.setVisibleRowCount(5);
+		table.optimizeColumnWidths(true);
+		table.setOptimizeRowHeight(true);
+		table.setEditable(true);
 		scrollPane.setViewportView(table);
 		getContentPane().setLayout(groupLayout);
 

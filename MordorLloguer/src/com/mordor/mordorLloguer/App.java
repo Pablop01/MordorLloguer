@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer;
 import java.awt.EventQueue;
 
 import com.alee.laf.WebLookAndFeel;
+import com.mordor.mordorLloguer.config.MyConfig;
 import com.mordor.mordorLloguer.controladores.Controlador;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.OracleDataBase;

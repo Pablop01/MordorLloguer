@@ -25,6 +25,7 @@ import com.mordor.mordorLloguer.vistas.vistaLogin;
 import com.mordor.mordorLloguer.vistas.vistaPrincipal;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaPreferencias;
+import com.mordor.mordorLloguer.vistas.vistaCarga;
 
 public class Controlador implements ActionListener {
 
@@ -32,9 +33,11 @@ public class Controlador implements ActionListener {
 	private vistaLogin vistaLogin;
 	private vistaPreferencias vistaPreferencias;
 	private vistaTabla vistaTabla;
+	private vistaCarga vistaCarga;
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
+	private SwingWorker<Void, Void> task2;
 	private boolean valido;
 
 	public Controlador(vistaPrincipal vista, AlmacenDatosDB modelo) {
@@ -85,11 +88,51 @@ public class Controlador implements ActionListener {
 		} else if (comando.equals("Preferences")) {
 			preferences();
 		} else if (comando.equals("Tabla")) {
-			mostrarTabla();
+			cargarTabla();	
 		} else if(comando.equals("Save Preferences")) {
 			savePreferences();
+		} else if (comando.equals("Cancelar carga")) {
+			task2.cancel(true);
 		}
 
+	}
+
+	private void cargarTabla() {
+		
+		if (!isOpen(vistaCarga)) {
+			if(!isOpen(vistaTabla)) {
+			vistaCarga = new vistaCarga();
+			addJInternalFrame(vistaCarga);
+			centrar(vistaCarga);
+			
+			vistaCarga.getBtnCancel().addActionListener(this);
+			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+			}
+		}
+		
+		task2 = new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				
+				Thread.sleep(1000);
+				mostrarTabla();
+				
+				return null;
+				
+			}
+
+			@Override
+			protected void done() {
+				
+				vistaCarga.dispose();
+				
+			}
+		};
+
+		task2.execute();
+		
+		
 	}
 
 	private void savePreferences() {
@@ -100,19 +143,19 @@ public class Controlador implements ActionListener {
 				String.valueOf(vistaPreferencias.getPassfieldContraseña().getPassword()));
 		
 		JOptionPane.showMessageDialog(null, "Saved Correctly", "Saved Correctly", JOptionPane.INFORMATION_MESSAGE);
+		vistaPreferencias.dispose();
 		
 	}
 
 	private void mostrarTabla() {
 		
-		vistaTabla frame = new vistaTabla();
-		ControladorTabla controlador = new ControladorTabla(modelo,frame);
-		controlador.go();
-		
-		if (!isOpen(frame)) {
+		if (!isOpen(vistaTabla)) {
 
-			addJInternalFrame(frame);
-			centrar(frame);
+			vistaTabla = new vistaTabla();
+			ControladorTabla controlador = new ControladorTabla(modelo,vistaTabla);
+			controlador.go();
+			addJInternalFrame(vistaTabla);
+			centrar(vistaTabla);
 			
 		}
 	}
@@ -157,6 +200,22 @@ public class Controlador implements ActionListener {
 			rellenarCampos();
 			addJInternalFrame(vistaPreferencias);
 		}
+		
+		Action action = new AbstractAction() {
+			
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				savePreferences();
+			}
+			
+		};
+		
+		vistaPreferencias.getTxtFieldUsuario().setAction(action);
+		vistaPreferencias.getTxtFieldDireccion().setAction(action);
+		vistaPreferencias.getTxtFieldDriver().setAction(action);
+		vistaPreferencias.getPassfieldContraseña().setAction(action);
 		
 		vistaPreferencias.getBtnGuardar().addActionListener(this);
 		vistaPreferencias.getBtnGuardar().setActionCommand("Save Preferences");
@@ -214,8 +273,7 @@ public class Controlador implements ActionListener {
 					vistaLogin.getProgressBar().setVisible(false);
 					vistaLogin.getLblError().setText("Incorrect username or password");
 				}
-				
-				
+
 			}
 
 		};
