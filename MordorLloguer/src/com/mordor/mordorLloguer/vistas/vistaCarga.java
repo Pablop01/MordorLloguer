@@ -19,12 +19,12 @@ public class vistaCarga extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public vistaCarga() {
+	public vistaCarga(String text) {
 		setFrameIcon(new ImageIcon(vistaCarga.class.getResource("/com/mordor/mordorLloguer/assets/clock.png")));
 		setBounds(100, 100, 390, 170);
 		getContentPane().setLayout(new MigLayout("", "[378.00]", "[][][][][][]"));
 		
-		JLabel lblNewLabel = new JLabel("Loading the data from the database");
+		JLabel lblNewLabel = new JLabel(text);
 		getContentPane().add(lblNewLabel, "cell 0 0,alignx center");
 		
 		JLabel lblPleaseWait = new JLabel("Please wait");

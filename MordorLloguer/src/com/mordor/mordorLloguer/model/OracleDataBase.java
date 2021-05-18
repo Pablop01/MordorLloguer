@@ -1,6 +1,7 @@
 package com.mordor.mordorLloguer.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +25,6 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 		if (where != null) {
 			query += "WHERE " + where;
-			System.out.println(query);
 		}
 
 		try (Connection con = ds.getConnection();
@@ -95,8 +95,28 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public boolean deleteEmpleado(String dni) {
+
+		boolean eliminado = false;
 		
-		return false;
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "DELETE FROM EMPLEADO WHERE DNI = ?";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, dni);
+			
+			if(pstmt.executeUpdate()==1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return eliminado;
 	}
 
 	@Override
@@ -126,6 +146,47 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 		return valido;
 
+		
+	}
+
+
+	@Override
+	public boolean addEmpleado(Empleado e) {
+		
+		boolean insertado = false;
+		
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "insert into empleado(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, cargo, password)"
+				+ " VALUES (?,?,?,?,?,?,?,?,encrypt_paswd.encrypt_val(?))";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			int pos = 0;
+			pstmt.setString(++pos, e.getDNI());
+			pstmt.setString(++pos, e.getNombre());
+			pstmt.setString(++pos, e.getApellidos());
+			pstmt.setString(++pos, e.getDomicilio());
+			pstmt.setString(++pos, e.getCP());
+			pstmt.setString(++pos, e.getEmail());
+			pstmt.setDate(++pos, e.getFechaNac());
+			pstmt.setString(++pos, e.getCargo());
+			pstmt.setString(++pos, e.getPassword());
+			
+			
+			System.out.println(query);
+
+			if(pstmt.executeUpdate()==1) {
+				insertado = true;
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		
+		return insertado;
 		
 	}
 

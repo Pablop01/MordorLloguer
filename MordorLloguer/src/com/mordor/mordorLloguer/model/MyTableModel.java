@@ -12,7 +12,7 @@ import com.alee.laf.table.WebTable;
 public abstract class MyTableModel<T> extends AbstractTableModel {
 
 	private WebTable table;
-	
+
 	public final String[] HEADER;
 
 	List<T> data;
@@ -36,7 +36,6 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	public String getColumnName(int column) {
 		return HEADER[column];
 	}
-
 
 	@Override
 	public abstract Object getValueAt(int row, int col);
@@ -94,13 +93,20 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 //	public void delete(String dni) {
 //
 //		delete(new Empleado(dni));
-//
+//		
+//		
 //	}
 
 	public void delete(T t) {
 		int pos = data.indexOf(t);
-		data.remove(t);
-		fireTableRowsDeleted(pos, pos);
+		if (data.remove(t))
+			fireTableRowsDeleted(pos, pos);
+	}
+
+	public synchronized void delete(int row) {
+
+		if (data.remove(row) != null)
+			fireTableRowsDeleted(row, row);
 	}
 
 //	@Override

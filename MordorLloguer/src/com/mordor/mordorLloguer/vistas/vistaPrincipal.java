@@ -72,7 +72,6 @@ public class vistaPrincipal extends JFrame {
 		toolBar.addSeparator(new Dimension(10,10));
 		
 		btnTabla = new JButton("");
-		btnTabla.setEnabled(false);
 		btnTabla.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		toolBar.add(btnTabla);
 		

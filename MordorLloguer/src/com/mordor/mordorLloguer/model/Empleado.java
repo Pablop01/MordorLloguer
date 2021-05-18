@@ -30,7 +30,22 @@ public class Empleado {
 		this.domicilio = domicilio;
 		this.password = password;
 	}
-
+	
+	public Empleado( String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
+			String cargo, String domicilio, String password) {
+		
+		super();
+		DNI = dNI;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		CP = cP;
+		this.email = email;
+		this.fechaNac = fechaNac;
+		this.cargo = cargo;
+		this.domicilio = domicilio;
+		this.password = password;
+	}
+	
 	public int getIdEmpleado() {
 		return idEmpleado;
 	}

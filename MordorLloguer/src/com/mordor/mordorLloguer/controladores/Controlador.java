@@ -101,7 +101,7 @@ public class Controlador implements ActionListener {
 		
 		if (!isOpen(vistaCarga)) {
 			if(!isOpen(vistaTabla)) {
-			vistaCarga = new vistaCarga();
+			vistaCarga = new vistaCarga("Loading the data from the database");
 			addJInternalFrame(vistaCarga);
 			centrar(vistaCarga);
 			
@@ -115,7 +115,6 @@ public class Controlador implements ActionListener {
 			@Override
 			protected Void doInBackground() throws Exception {
 				
-				Thread.sleep(1000);
 				mostrarTabla();
 				
 				return null;

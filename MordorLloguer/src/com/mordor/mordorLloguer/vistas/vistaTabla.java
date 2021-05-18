@@ -1,12 +1,17 @@
 package com.mordor.mordorLloguer.vistas;
 
+import java.awt.Component;
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JInternalFrame;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
@@ -23,6 +28,9 @@ public class vistaTabla extends JInternalFrame {
 	private JButton btnClose;
 	private JComboBox comboBoxSort;
 	private JComboBox comboBoxDirection;
+	private JPopupMenu popupMenu;
+	private JMenuItem mntmAddRow;
+	private JMenuItem mntmDeleteRow;
 
 	/**
 	 * Create the frame.
@@ -98,10 +106,56 @@ public class vistaTabla extends JInternalFrame {
 		table.setOptimizeRowHeight(true);
 		table.setEditable(true);
 		scrollPane.setViewportView(table);
+		
+		popupMenu = new JPopupMenu();
+		addPopup(table, popupMenu);
+		
+		mntmAddRow = new JMenuItem("Add Row");
+		popupMenu.add(mntmAddRow);
+		
+		mntmDeleteRow = new JMenuItem("Delete Row");
+		popupMenu.add(mntmDeleteRow);
+		
+		table.addMouseListener(new MouseAdapter(){
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				if(e.getButton() == (MouseEvent.BUTTON3)) {
+					int row = table.rowAtPoint(e.getPoint());
+					
+					if(row<0 || row>table.getRowCount()) {
+						table.clearSelection();
+					}else if(table.getSelectedRowCount() <= 1) {
+						table.setSelectedRow(row);
+						popupMenu.show(table, e.getX(), e.getY());
+					}else if(table.getSelectedRowCount() > 1) {
+						popupMenu.show(table, e.getX(), e.getY());
+					}
+				}
+			}
+		});
+		
 		getContentPane().setLayout(groupLayout);
 
 	}
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
+	
 	public JButton getBtnAdd() {
 		return btnAdd;
 	}
@@ -125,5 +179,19 @@ public class vistaTabla extends JInternalFrame {
 	public WebTable getTable() {
 		return table;
 	}
+
+	public JMenuItem getMntmAddRow() {
+		return mntmAddRow;
+	}
+
+	public JMenuItem getMntmDeleteRow() {
+		return mntmDeleteRow;
+	}
+
+	public JPopupMenu getPopupMenu() {
+		return popupMenu;
+	}
+	
+	
 	
 }
