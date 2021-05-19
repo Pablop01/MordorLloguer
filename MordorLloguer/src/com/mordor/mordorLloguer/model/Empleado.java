@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class Empleado {
 
-	private int idEmpleado;
+
 	private String DNI;
 	private String nombre;
 	private String apellidos;
@@ -15,21 +15,6 @@ public class Empleado {
 	private String domicilio;
 	private String password;
 	
-	public Empleado(int idEmpleado, String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
-			String cargo, String domicilio, String password) {
-		
-		super();
-		this.idEmpleado = idEmpleado;
-		DNI = dNI;
-		this.nombre = nombre;
-		this.apellidos = apellidos;
-		CP = cP;
-		this.email = email;
-		this.fechaNac = fechaNac;
-		this.cargo = cargo;
-		this.domicilio = domicilio;
-		this.password = password;
-	}
 	
 	public Empleado( String dNI, String nombre, String apellidos, String cP, String email, Date fechaNac,
 			String cargo, String domicilio, String password) {
@@ -46,14 +31,6 @@ public class Empleado {
 		this.password = password;
 	}
 	
-	public int getIdEmpleado() {
-		return idEmpleado;
-	}
-
-	public void setIdEmpleado(int idEmpleado) {
-		this.idEmpleado = idEmpleado;
-	}
-
 	public String getDNI() {
 		return DNI;
 	}
@@ -128,7 +105,7 @@ public class Empleado {
 
 	@Override
 	public String toString() {
-		return "Empleado [idEmpleado=" + idEmpleado + ", DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos
+		return "Empleado [DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos
 				+ ", CP=" + CP + ", email=" + email + ", fechaNac=" + fechaNac + ", cargo=" + cargo + ", domicilio="
 				+ domicilio + ", password=" + password + "]" + "\n";
 	}

@@ -13,5 +13,7 @@ public interface AlmacenDatosDB {
 	boolean updateEmpleado(Empleado empleado);
 	boolean deleteEmpleado(String dni);
 	boolean authenticate(String dni, String password);
+	public ArrayList<Cliente> getClientes();
+	boolean deleteCliente(String dni);
 	
 }

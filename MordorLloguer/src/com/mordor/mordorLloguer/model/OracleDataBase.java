@@ -35,7 +35,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				empleado = new Empleado(rs.getInt("IDEMPLEADO"), rs.getString("DNI"), rs.getString("NOMBRE"),
+				empleado = new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
 						rs.getString("APELLIDOS"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
 						rs.getString("CARGO"), rs.getString("DOMICILIO"), rs.getString("PASSWORD"));
 
@@ -174,9 +174,6 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setDate(++pos, e.getFechaNac());
 			pstmt.setString(++pos, e.getCargo());
 			pstmt.setString(++pos, e.getPassword());
-			
-			
-			System.out.println(query);
 
 			if(pstmt.executeUpdate()==1) {
 				insertado = true;
@@ -184,9 +181,82 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-		}
+			System.out.println(ex.getErrorCode());
+			if(ex.getErrorCode() == 00001) {
+				JOptionPane.showMessageDialog(null, "There is already an employee with this DNI", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
+		} 
 		
 		return insertado;
+		
+	}
+
+
+	@Override
+	public ArrayList<Cliente> getClientes() {
+		
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "SELECT * FROM CLIENTE ";
+
+		try (Connection con = ds.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
+
+			Cliente cliente;
+
+			while (rs.next()) {
+
+				cliente = new Cliente(rs.getString("DNI"), 
+						rs.getString("NOMBRE"),
+						rs.getString("APELLIDOS"), 
+						rs.getString("DOMICILIO"), 
+						rs.getString("CP"), 
+						rs.getString("EMAIL"), 
+						rs.getDate("FECHANAC"),
+						rs.getString("CARNET").charAt(0),
+						rs.getBytes("FOTO"));
+
+				clientes.add(cliente);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return clientes;
+
+	}
+
+
+	@Override
+	public boolean deleteCliente(String dni) {
+		
+		boolean eliminado = false;
+		
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONALQUILER.bajaCliente(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, dni);
+			
+			if(pstmt.executeUpdate()==1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return eliminado;
 		
 	}
 

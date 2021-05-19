@@ -40,14 +40,14 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 	@Override
 	public abstract Object getValueAt(int row, int col);
 
-	@Override
-	public boolean isCellEditable(int rowIndex, int columnIndex) {
-		if (columnIndex == 0) {
-			return false;
-		} else {
-			return true;
-		}
-	}
+//	@Override
+//	public boolean isCellEditable(int rowIndex, int columnIndex) {
+//		if (columnIndex == 0) {
+//			return false;
+//		} else {
+//			return true;
+//		}
+//	}
 
 //	@Override
 //	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {

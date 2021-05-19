@@ -26,6 +26,7 @@ import com.mordor.mordorLloguer.vistas.vistaPrincipal;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaPreferencias;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
+import com.mordor.mordorLloguer.vistas.vistaTablaClientes;
 
 public class Controlador implements ActionListener {
 
@@ -34,10 +35,12 @@ public class Controlador implements ActionListener {
 	private vistaPreferencias vistaPreferencias;
 	private vistaTabla vistaTabla;
 	private vistaCarga vistaCarga;
+	private vistaTablaClientes vistaTablaClientes;
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
 	private SwingWorker<Void, Void> task2;
+	private SwingWorker<Void, Void> task3;
 	private boolean valido;
 
 	public Controlador(vistaPrincipal vista, AlmacenDatosDB modelo) {
@@ -58,6 +61,7 @@ public class Controlador implements ActionListener {
 		vista.getMntmExit().addActionListener(this);
 		vista.getMntmPreferences().addActionListener(this);
 		vista.getBtnTabla().addActionListener(this);
+		vista.getBtnClientes().addActionListener(this);
 
 		// Añadir ActionCommand
 		vista.getBtnlogin().setActionCommand("Abrir login");
@@ -65,6 +69,7 @@ public class Controlador implements ActionListener {
 		vista.getMntmExit().setActionCommand("Exit");
 		vista.getMntmPreferences().setActionCommand("Preferences");
 		vista.getBtnTabla().setActionCommand("Tabla");
+		vista.getBtnClientes().setActionCommand("Tabla cliente");
 
 	}
 
@@ -93,8 +98,60 @@ public class Controlador implements ActionListener {
 			savePreferences();
 		} else if (comando.equals("Cancelar carga")) {
 			task2.cancel(true);
+		} else if(comando.equals("Tabla cliente")) {
+			cargarTablaClientes();
 		}
 
+	}
+
+	private void cargarTablaClientes() {
+		
+		if (!isOpen(vistaCarga)) {
+			if(!isOpen(vistaTablaClientes)) {
+			vistaCarga = new vistaCarga("Loading the data from the database");
+			addJInternalFrame(vistaCarga);
+			centrar(vistaCarga);
+			
+			vistaCarga.getBtnCancel().addActionListener(this);
+			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+			}
+		}
+		
+		task3 = new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				
+				mostrarTablaClientes();
+				
+				return null;
+				
+			}
+
+			@Override
+			protected void done() {
+				
+				vistaCarga.dispose();
+				
+			}
+		};
+
+		task3.execute();
+		
+	}
+	
+	private void mostrarTablaClientes() {
+	
+		if (!isOpen(vistaTablaClientes)) {
+
+			vistaTablaClientes = new vistaTablaClientes();
+			ControladorClientes controladorClientes = new ControladorClientes(modelo,vistaTablaClientes);
+			controladorClientes.go();
+			addJInternalFrame(vistaTablaClientes);
+			centrar(vistaTablaClientes);
+			
+		}
+		
 	}
 
 	private void cargarTabla() {

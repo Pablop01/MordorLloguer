@@ -1,5 +1,6 @@
 package com.mordor.mordorLloguer.controladores;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -93,7 +94,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorNombre() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getNombre().compareTo(e2.getNombre()));
+		Collections.sort(empleados, (e1, e2) -> e1.getNombre().compareToIgnoreCase(e2.getNombre()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -103,7 +104,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorApellidos() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getApellidos().compareTo(e2.getApellidos()));
+		Collections.sort(empleados, (e1, e2) -> e1.getApellidos().compareToIgnoreCase(e2.getApellidos()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -112,7 +113,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorDomicilio() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getDomicilio().compareTo(e2.getDomicilio()));
+		Collections.sort(empleados, (e1, e2) -> e1.getDomicilio().compareToIgnoreCase(e2.getDomicilio()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -121,7 +122,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorCP() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getCP().compareTo(e2.getCP()));
+		Collections.sort(empleados, (e1, e2) -> e1.getCP().compareToIgnoreCase(e2.getCP()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -131,7 +132,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorEmail() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getEmail().compareTo(e2.getEmail()));
+		Collections.sort(empleados, (e1, e2) -> e1.getEmail().compareToIgnoreCase(e2.getEmail()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -150,7 +151,7 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorCargo() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getCargo().compareTo(e2.getCargo()));
+		Collections.sort(empleados, (e1, e2) -> e1.getCargo().compareToIgnoreCase(e2.getCargo()));
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -227,18 +228,32 @@ public class ControladorTabla implements ActionListener {
 		String apellidos = vistaAdd.getTxtFieldSurname().getText();
 		String CP = vistaAdd.getTxtFieldCP().getText();
 		String email = vistaAdd.getTxtFieldEmail().getText();
-		java.sql.Date fechaNac = new java.sql.Date(vistaAdd.getTxtFieldBirthday().getDate().getTime());
 		String cargo = String.valueOf(vistaAdd.getComboBox().getSelectedItem());
 		String domicilio = vistaAdd.getTxtFieldAdress().getText();
 		String password = String.valueOf(vistaAdd.getPasswordField().getPassword());
-
-		Empleado e = new Empleado(DNI, nombre, apellidos, CP, email, fechaNac, cargo, domicilio, password);
-		if (modelo.addEmpleado(e)) {
-			JOptionPane.showMessageDialog(null, "Employee created successfully", "Correct procedure",
-					JOptionPane.INFORMATION_MESSAGE);
-			vistaAdd.dispose();
-			recargarTabla();
+		
+		if(vistaAdd.getTxtFieldBirthday().getDate() == null | DNI.equals("")| nombre.equals("") | apellidos.equals("")
+			| email.equals("") | password.equals("")) {
+			
+			JOptionPane.showMessageDialog(null, "You must fill in all the required fields (*)", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+			
+		}else {
+			
+			java.sql.Date fechaNac = new java.sql.Date(vistaAdd.getTxtFieldBirthday().getDate().getTime());
+			
+			
+			Empleado e = new Empleado(DNI, nombre, apellidos, CP, email, fechaNac, cargo, domicilio, password);
+			if (modelo.addEmpleado(e)) {
+				JOptionPane.showMessageDialog(null, "Employee created successfully", "Correct procedure",
+						JOptionPane.INFORMATION_MESSAGE);
+				vistaAdd.dispose();
+				recargarTabla();
+			}
+			
+			
 		}
+		
 	}
 
 	private void recargarTabla() {
@@ -440,6 +455,15 @@ public class ControladorTabla implements ActionListener {
 				return String.class;
 			}
 
+		}
+		
+		@Override
+		public boolean isCellEditable(int rowIndex, int columnIndex) {
+			if (columnIndex == 0) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 
 	}

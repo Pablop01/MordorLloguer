@@ -28,6 +28,7 @@ public class vistaPrincipal extends JFrame {
 	private JMenuItem mntmExit;
 	private JMenuItem mntmPreferences;
 	private JButton btnTabla;
+	private JButton btnClientes;
 	
 	/**
 	 * Create the frame.
@@ -75,6 +76,10 @@ public class vistaPrincipal extends JFrame {
 		btnTabla.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		toolBar.add(btnTabla);
 		
+		btnClientes = new JButton("");
+		btnClientes.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/group.png")));
+		toolBar.add(btnClientes);
+		
 		desktopPane = new JDesktopPane();
 		contentPane.add(desktopPane, BorderLayout.CENTER);
 		
@@ -103,6 +108,9 @@ public class vistaPrincipal extends JFrame {
 	public JButton getBtnTabla() {
 		return btnTabla;
 	}
-	
+
+	public JButton getBtnClientes() {
+		return btnClientes;
+	}
 	
 }
