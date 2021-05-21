@@ -26,12 +26,14 @@ import com.mordor.mordorLloguer.vistas.vistaAdd;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaTablaClientes;
+import com.mordor.mordorLloguer.vistas.vistaAddCliente;
 
 public class ControladorClientes implements ActionListener, DocumentListener {
 
 	private AlmacenDatosDB modelo;
 	private vistaTablaClientes vista;
 	private vistaCarga vistaCarga;
+	private vistaAddCliente vistaAddCliente;
 	private ArrayList<Cliente> clientes;
 	private SwingWorker<Boolean, Void> task2;
 	private SwingWorker<Boolean, Void> task3;
@@ -172,8 +174,22 @@ public class ControladorClientes implements ActionListener, DocumentListener {
 			cambiarOrden();
 		} else if (comando.equals("Delete")) {
 			deleteCustomer();
+		} else if (comando.equals("Add")) {
+			addCustomer();
 		}
 
+	}
+
+	private void addCustomer() {
+		
+		if (!Controlador.isOpen(vistaAddCliente)) {
+
+			vistaAddCliente = new vistaAddCliente();
+			Controlador.addJInternalFrame(vistaAddCliente);
+			Controlador.centrar(vistaAddCliente);
+
+		}
+		
 	}
 
 	private void deleteCustomer() {

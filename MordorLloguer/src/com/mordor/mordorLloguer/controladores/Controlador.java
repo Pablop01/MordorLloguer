@@ -343,6 +343,7 @@ public class Controlador implements ActionListener {
 		vista.getBtnlogin().setEnabled(!estado);
 		vista.getBtnlogout().setEnabled(estado);
 		vista.getBtnTabla().setEnabled(estado);
+		vista.getBtnClientes().setEnabled(estado);
 
 		if (!estado) {
 			JOptionPane.showMessageDialog(null, "Session closed successfully", "Rigth logout",
