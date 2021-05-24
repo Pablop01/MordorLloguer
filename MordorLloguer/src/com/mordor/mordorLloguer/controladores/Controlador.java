@@ -20,6 +20,7 @@ import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.config.MyConfig;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
+import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.model.MyDataSourceOracle;
 import com.mordor.mordorLloguer.vistas.vistaLogin;
 import com.mordor.mordorLloguer.vistas.vistaPrincipal;
@@ -319,7 +320,7 @@ public class Controlador implements ActionListener {
 
 			@Override
 			protected void done() {
-
+				
 				if(valido) {
 					JOptionPane.showMessageDialog(null, "Session successfully started", "Rigth login", JOptionPane.INFORMATION_MESSAGE);
 					vistaLogin.dispose();

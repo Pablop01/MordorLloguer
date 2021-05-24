@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class vistaAddCliente extends JInternalFrame {
+public class vistaEdit extends JInternalFrame {
 	private JTextField txtFieldEmail;
 	private  WebDateField txtFieldBirthday;
 	private JTextField txtFieldCP;
@@ -24,14 +24,14 @@ public class vistaAddCliente extends JInternalFrame {
 	private JTextField txtFieldSurname;
 	private JTextField txtFieldAdress;
 	private JLabel lblFoto;
-	private JButton btnAdd;
+	private JButton btnEdit;
 	private JButton btnCancel;
 	private JComboBox comboBox;
 	/**
 	 * Create the frame.
 	 */
-	public vistaAddCliente() {
-		setFrameIcon(new ImageIcon(vistaAddCliente.class.getResource("/com/mordor/mordorLloguer/assets/user.png")));
+	public vistaEdit() {
+		setFrameIcon(new ImageIcon(vistaEdit.class.getResource("/com/mordor/mordorLloguer/assets/person.png")));
 		setClosable(true);
 		setBounds(100, 100, 537, 423);
 		getContentPane().setLayout(new MigLayout("", "[][][grow][][][grow]", "[][][][][][][][][][][][][][]"));
@@ -42,62 +42,62 @@ public class vistaAddCliente extends JInternalFrame {
 		JLabel lblNewLabel_1 = new JLabel("Click on the picture to change it");
 		getContentPane().add(lblNewLabel_1, "cell 0 3 6 1,alignx center");
 		
-		JLabel lblDni = new JLabel("DNI:* ");
+		JLabel lblDni = new JLabel("DNI: ");
 		getContentPane().add(lblDni, "cell 0 5,alignx left");
 		
 		txtFieldDNI = new JTextField();
 		getContentPane().add(txtFieldDNI, "cell 1 5,growx");
 		txtFieldDNI.setColumns(10);
 		
-		JLabel lblEmail = new JLabel("Email:* ");
+		JLabel lblEmail = new JLabel("Email: ");
 		getContentPane().add(lblEmail, "cell 3 5,alignx left");
 		
 		txtFieldEmail = new JTextField();
 		getContentPane().add(txtFieldEmail, "cell 4 5,growx");
 		txtFieldEmail.setColumns(10);
 		
-		JLabel lblName = new JLabel("Name:* ");
+		JLabel lblName = new JLabel("Name: ");
 		getContentPane().add(lblName, "cell 0 7,alignx left");
 		
 		txtFieldName = new JTextField();
 		getContentPane().add(txtFieldName, "cell 1 7,growx");
 		txtFieldName.setColumns(10);
 		
-		JLabel lblBirthday = new JLabel("Birthday:* ");
+		JLabel lblBirthday = new JLabel("Birthday: ");
 		getContentPane().add(lblBirthday, "cell 3 7,alignx left");
 		
 		txtFieldBirthday =  new WebDateField();
 		getContentPane().add(txtFieldBirthday, "cell 4 7,growx");
 		
-		JLabel lblSurname = new JLabel("Surname:* ");
+		JLabel lblSurname = new JLabel("Surname: ");
 		getContentPane().add(lblSurname, "cell 0 9,alignx left");
 		
 		txtFieldSurname = new JTextField();
 		getContentPane().add(txtFieldSurname, "cell 1 9,growx");
 		txtFieldSurname.setColumns(10);
 		
-		JLabel lblDrivingLicense = new JLabel("Driving License:* ");
+		JLabel lblDrivingLicense = new JLabel("Driving License: ");
 		getContentPane().add(lblDrivingLicense, "cell 3 9,alignx left");
 		
 		comboBox = new JComboBox();
 		getContentPane().add(comboBox, "cell 4 9,alignx left");
 		
-		JLabel lblAdress = new JLabel("Adress:* ");
+		JLabel lblAdress = new JLabel("Adress: ");
 		getContentPane().add(lblAdress, "cell 0 11,alignx left");
 		
 		txtFieldAdress = new JTextField();
 		getContentPane().add(txtFieldAdress, "cell 1 11,growx");
 		txtFieldAdress.setColumns(10);
 		
-		JLabel lblCp = new JLabel("CP:* ");
+		JLabel lblCp = new JLabel("CP: ");
 		getContentPane().add(lblCp, "cell 3 11,alignx left");
 		
 		txtFieldCP = new JTextField();
 		getContentPane().add(txtFieldCP, "cell 4 11,growx");
 		txtFieldCP.setColumns(10);
 		
-		btnAdd = new JButton("Add");
-		getContentPane().add(btnAdd, "cell 3 13,alignx right");
+		btnEdit = new JButton("Save");
+		getContentPane().add(btnEdit, "cell 3 13,alignx right");
 		
 		btnCancel = new JButton("Cancel");
 		getContentPane().add(btnCancel, "cell 4 13");
@@ -128,7 +128,7 @@ public class vistaAddCliente extends JInternalFrame {
 		return lblFoto;
 	}
 	public JButton getBtnAdd() {
-		return btnAdd;
+		return btnEdit;
 	}
 	public JButton getBtnCancel() {
 		return btnCancel;

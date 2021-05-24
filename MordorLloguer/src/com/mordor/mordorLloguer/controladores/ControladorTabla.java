@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -113,7 +114,22 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorDomicilio() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getDomicilio().compareToIgnoreCase(e2.getDomicilio()));
+		Collections.sort(empleados, new Comparator<Empleado>() {
+
+			@Override
+			public int compare(Empleado e1, Empleado e2) {
+				if(e1.getDomicilio() != null) {
+					if(e2.getDomicilio() != null) {
+						return e1.getDomicilio().compareToIgnoreCase(e2.getDomicilio());
+					}else {
+						return -1;
+					}
+				}else {
+					return 1;
+				}
+			}
+			
+		});
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -122,7 +138,22 @@ public class ControladorTabla implements ActionListener {
 
 	private void ordenarPorCP() {
 
-		Collections.sort(empleados, (e1, e2) -> e1.getCP().compareToIgnoreCase(e2.getCP()));
+		Collections.sort(empleados, new Comparator<Empleado>() {
+
+			@Override
+			public int compare(Empleado e1, Empleado e2) {
+				if(e1.getCP() != null) {
+					if(e2.getCP() != null) {
+						return e1.getCP().compareToIgnoreCase(e2.getCP());
+					}else {
+						return -1;
+					}
+				}else {
+					return 1;
+				}
+			}
+			
+		});
 
 		MyEmployeeTableModel tabla = new MyEmployeeTableModel(empleados, header);
 
@@ -231,18 +262,17 @@ public class ControladorTabla implements ActionListener {
 		String cargo = String.valueOf(vistaAdd.getComboBox().getSelectedItem());
 		String domicilio = vistaAdd.getTxtFieldAdress().getText();
 		String password = String.valueOf(vistaAdd.getPasswordField().getPassword());
-		
-		if(vistaAdd.getTxtFieldBirthday().getDate() == null | DNI.equals("")| nombre.equals("") | apellidos.equals("")
-			| email.equals("") | password.equals("")) {
-			
+
+		if (vistaAdd.getTxtFieldBirthday().getDate() == null | DNI.equals("") | nombre.equals("") | apellidos.equals("")
+				| email.equals("") | password.equals("")) {
+
 			JOptionPane.showMessageDialog(null, "You must fill in all the required fields (*)", "ERROR",
 					JOptionPane.ERROR_MESSAGE);
-			
-		}else {
-			
+
+		} else {
+
 			java.sql.Date fechaNac = new java.sql.Date(vistaAdd.getTxtFieldBirthday().getDate().getTime());
-			
-			
+
 			Empleado e = new Empleado(DNI, nombre, apellidos, CP, email, fechaNac, cargo, domicilio, password);
 			if (modelo.addEmpleado(e)) {
 				JOptionPane.showMessageDialog(null, "Employee created successfully", "Correct procedure",
@@ -250,10 +280,9 @@ public class ControladorTabla implements ActionListener {
 				vistaAdd.dispose();
 				recargarTabla();
 			}
-			
-			
+
 		}
-		
+
 	}
 
 	private void recargarTabla() {
@@ -274,7 +303,7 @@ public class ControladorTabla implements ActionListener {
 
 				empleados = modelo.getEmpleados();
 				ordenarPorDNI();
-				
+
 				return null;
 
 			}
@@ -320,46 +349,56 @@ public class ControladorTabla implements ActionListener {
 
 	private void deleteEmployee() {
 
-		if (!Controlador.isOpen(vistaCarga)) {
+		if (vista.getTable().getSelectedRow() == -1) {
 
-			vistaCarga = new vistaCarga("Removing employees from the database");
-			Controlador.addJInternalFrame(vistaCarga);
-			Controlador.centrar(vistaCarga);
+			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
 
-			vistaCarga.getBtnCancel().addActionListener(this);
-			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+			
+		} else {
+
+			if (!Controlador.isOpen(vistaCarga)) {
+
+				vistaCarga = new vistaCarga("Removing employees from the database");
+				Controlador.addJInternalFrame(vistaCarga);
+				Controlador.centrar(vistaCarga);
+
+				vistaCarga.getBtnCancel().addActionListener(this);
+				vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+
+			}
+
+			task2 = new SwingWorker<Boolean, Void>() {
+
+				ArrayList<Empleado> empleados;
+
+				@Override
+				protected Boolean doInBackground() throws Exception {
+
+					int[] rows = new int[vista.getTable().getRowCount()];
+					rows = vista.getTable().getSelectedRows();
+
+					empleados = ((MyTableModel) vista.getTable().getModel()).get(rows);
+
+					for (Empleado empleado : empleados)
+						modelo.deleteEmpleado(empleado.getDNI());
+
+					return true;
+
+				}
+
+				@Override
+				protected void done() {
+
+					for (Empleado empleado : empleados)
+						((MyTableModel) vista.getTable().getModel()).delete(empleado);
+					vistaCarga.dispose();
+				}
+			};
+
+			task2.execute();
 
 		}
-
-		task2 = new SwingWorker<Boolean, Void>() {
-
-			ArrayList<Empleado> empleados;
-
-			@Override
-			protected Boolean doInBackground() throws Exception {
-
-				int[] rows = new int[vista.getTable().getRowCount()];
-				rows = vista.getTable().getSelectedRows();
-
-				empleados = ((MyTableModel) vista.getTable().getModel()).get(rows);
-
-				for (Empleado empleado : empleados)
-					modelo.deleteEmpleado(empleado.getDNI());
-
-				return true;
-
-			}
-
-			@Override
-			protected void done() {
-
-				for (Empleado empleado : empleados)
-					((MyTableModel) vista.getTable().getModel()).delete(empleado);
-				vistaCarga.dispose();
-			}
-		};
-
-		task2.execute();
 
 	}
 
@@ -456,7 +495,7 @@ public class ControladorTabla implements ActionListener {
 			}
 
 		}
-		
+
 		@Override
 		public boolean isCellEditable(int rowIndex, int columnIndex) {
 			if (columnIndex == 0) {

@@ -18,6 +18,10 @@ import javax.swing.SwingConstants;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JLabel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class vistaPrincipal extends JFrame {
 
@@ -112,5 +116,4 @@ public class vistaPrincipal extends JFrame {
 	public JButton getBtnClientes() {
 		return btnClientes;
 	}
-	
 }

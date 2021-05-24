@@ -35,9 +35,9 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				empleado = new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"),
-						rs.getString("APELLIDOS"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
-						rs.getString("CARGO"), rs.getString("DOMICILIO"), rs.getString("PASSWORD"));
+				empleado = new Empleado(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
+						rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"), rs.getString("CARGO"),
+						rs.getString("DOMICILIO"), rs.getString("PASSWORD"));
 
 				empleados.add(empleado);
 
@@ -51,7 +51,6 @@ public class OracleDataBase implements AlmacenDatosDB {
 		return empleados;
 
 	}
-	
 
 	@Override
 	public ArrayList<Empleado> getEmpleados() {
@@ -76,15 +75,15 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public Empleado getEmpleadosPorDNI(String dni) {
-		
+
 		ArrayList<Empleado> empleados = getCustomEmpleados("DNI='" + dni + "'");
-		
-		if(empleados.size()==0) {
+
+		if (empleados.size() == 0) {
 			return null;
-		}else {
+		} else {
 			return empleados.get(0);
 		}
-			
+
 	}
 
 	@Override
@@ -97,7 +96,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 	public boolean deleteEmpleado(String dni) {
 
 		boolean eliminado = false;
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "DELETE FROM EMPLEADO WHERE DNI = ?";
@@ -105,23 +104,23 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, dni);
-			
-			if(pstmt.executeUpdate()==1) {
+
+			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return eliminado;
 	}
 
 	@Override
 	public boolean authenticate(String dni, String password) {
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 		boolean valido = false;
 		String query = "SELECT COUNT(*) FROM EMPLEADO WHERE DNI=? AND PASSWORD=ENCRYPT_PASWD.encrypt_val(?) ";
@@ -139,22 +138,22 @@ public class OracleDataBase implements AlmacenDatosDB {
 			}
 
 		} catch (SQLException e) {
-				
-			JOptionPane.showMessageDialog(null, "The database configuration is incorrect, You can change it in preferences", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+			JOptionPane.showMessageDialog(null,
+					"The database configuration is incorrect, You can change it in preferences", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
 
 		}
 
 		return valido;
 
-		
 	}
-
 
 	@Override
 	public boolean addEmpleado(Empleado e) {
-		
+
 		boolean insertado = false;
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "insert into empleado(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, cargo, password)"
@@ -163,7 +162,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			int pos = 0;
 			pstmt.setString(++pos, e.getDNI());
 			pstmt.setString(++pos, e.getNombre());
@@ -175,26 +174,26 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(++pos, e.getCargo());
 			pstmt.setString(++pos, e.getPassword());
 
-			if(pstmt.executeUpdate()==1) {
+			if (pstmt.executeUpdate() == 1) {
 				insertado = true;
 			}
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			System.out.println(ex.getErrorCode());
-			if(ex.getErrorCode() == 00001) {
-				JOptionPane.showMessageDialog(null, "There is already an employee with this DNI", "ERROR", JOptionPane.ERROR_MESSAGE);
+			if (ex.getErrorCode() == 00001) {
+				JOptionPane.showMessageDialog(null, "There is already an employee with this DNI", "ERROR",
+						JOptionPane.ERROR_MESSAGE);
 			}
-		} 
-		
-		return insertado;
-		
-	}
+		}
 
+		return insertado;
+
+	}
 
 	@Override
 	public ArrayList<Cliente> getClientes() {
-		
+
 		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -209,15 +208,9 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				cliente = new Cliente(rs.getString("DNI"), 
-						rs.getString("NOMBRE"),
-						rs.getString("APELLIDOS"), 
-						rs.getString("DOMICILIO"), 
-						rs.getString("CP"), 
-						rs.getString("EMAIL"), 
-						rs.getDate("FECHANAC"),
-						rs.getString("CARNET").charAt(0),
-						rs.getBytes("FOTO"));
+				cliente = new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
+						rs.getString("DOMICILIO"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
+						rs.getString("CARNET").charAt(0), rs.getBytes("FOTO"));
 
 				clientes.add(cliente);
 
@@ -232,12 +225,11 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	}
 
-
 	@Override
 	public boolean deleteCliente(String dni) {
-		
+
 		boolean eliminado = false;
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "{call GESTIONALQUILER.bajaCliente(?)}";
@@ -245,19 +237,52 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, dni);
-			
-			if(pstmt.executeUpdate()==1) {
+
+			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return eliminado;
-		
+
+	}
+
+	@Override
+	public boolean addCliente(Cliente cliente) {
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONALQUILER.grabarCliente(?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, cliente.getDNI());
+			pstmt.setString(2, cliente.getNombre());
+			pstmt.setString(3, cliente.getApellidos());
+			pstmt.setString(4, cliente.getDomicilio());
+			pstmt.setString(5, cliente.getCP());
+			pstmt.setString(6, cliente.getEmail());
+			pstmt.setDate(7, cliente.getFechaNac());
+			pstmt.setString(8, String.valueOf(cliente.getCarnet()));
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+
 	}
 
 }
