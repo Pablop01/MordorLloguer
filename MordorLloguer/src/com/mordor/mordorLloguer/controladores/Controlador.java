@@ -28,6 +28,7 @@ import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaPreferencias;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
 import com.mordor.mordorLloguer.vistas.vistaTablaClientes;
+import com.mordor.mordorLloguer.vistas.vistaVehiculos;
 
 public class Controlador implements ActionListener {
 
@@ -37,6 +38,7 @@ public class Controlador implements ActionListener {
 	private vistaTabla vistaTabla;
 	private vistaCarga vistaCarga;
 	private vistaTablaClientes vistaTablaClientes;
+	private vistaVehiculos vistaVehiculos;
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
@@ -63,6 +65,7 @@ public class Controlador implements ActionListener {
 		vista.getMntmPreferences().addActionListener(this);
 		vista.getBtnTabla().addActionListener(this);
 		vista.getBtnClientes().addActionListener(this);
+		vista.getBtnVehiculos().addActionListener(this);
 
 		// Añadir ActionCommand
 		vista.getBtnlogin().setActionCommand("Abrir login");
@@ -71,6 +74,7 @@ public class Controlador implements ActionListener {
 		vista.getMntmPreferences().setActionCommand("Preferences");
 		vista.getBtnTabla().setActionCommand("Tabla");
 		vista.getBtnClientes().setActionCommand("Tabla cliente");
+		vista.getBtnVehiculos().setActionCommand("Vehiculos");
 
 	}
 
@@ -101,8 +105,22 @@ public class Controlador implements ActionListener {
 			task2.cancel(true);
 		} else if(comando.equals("Tabla cliente")) {
 			cargarTablaClientes();
+		} else if(comando.equals("Vehiculos")) {
+			cargarTablaVehiculos();
 		}
 
+	}
+
+	private void cargarTablaVehiculos() {
+		
+	
+			if(!isOpen(vistaVehiculos)) {
+			vistaVehiculos = new vistaVehiculos();
+			addJInternalFrame(vistaVehiculos);
+			centrar(vistaVehiculos);
+			
+		}
+		
 	}
 
 	private void cargarTablaClientes() {

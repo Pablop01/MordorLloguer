@@ -4,6 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,11 +17,14 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.Document;
 
 import com.mordor.mordorLloguer.controladores.ControladorTabla.MyEmployeeTableModel;
@@ -28,6 +36,7 @@ import com.mordor.mordorLloguer.vistas.vistaAdd;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaTablaClientes;
+
 import com.mordor.mordorLloguer.vistas.vistaAddCliente;
 import com.mordor.mordorLloguer.vistas.vistaEdit;
 
@@ -44,6 +53,10 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 	private SwingWorker<Void, Void> task;
 	private DefaultComboBoxModel dcbCarnets;
 	private DefaultComboBoxModel dcbCarnetsAdd;
+	private byte[] imgFoto;
+	private boolean cambiarFoto = false;
+	private boolean iguales = false;
+	private Cliente c;
 	String[] header = { "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "Nacimiento", "Carnet" };
 
 	public ControladorClientes(AlmacenDatosDB modelo, vistaTablaClientes vista) {
@@ -198,7 +211,7 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 	}
 
 	private void editCustomer() {
-		
+
 		String DNI = vistaEdit.getTxtFieldDNI().getText();
 		String nombre = vistaEdit.getTxtFieldName().getText();
 		String apellidos = vistaEdit.getTxtFieldSurname().getText();
@@ -210,14 +223,25 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 		if (vistaEdit.getTxtFieldBirthday().getDate() == null | DNI.equals("") | nombre.equals("")
 				| apellidos.equals("") | email.equals("") | domicilio.equals("") | CP.equals("")) {
 
-			JOptionPane.showMessageDialog(null, "You must fill in all the fields", "ERROR",
-					JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "You must fill in all the fields", "ERROR", JOptionPane.ERROR_MESSAGE);
 
 		} else {
 
 			java.sql.Date fechaNac = new java.sql.Date(vistaEdit.getTxtFieldBirthday().getDate().getTime());
 
-			Cliente c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0));
+			if (cambiarFoto) {
+
+				byte[] imgNueva = imgFoto;
+
+				c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0), imgNueva);
+				cambiarFoto = false;
+				vistaEdit.setImage(imgNueva);
+
+			} else {
+
+				c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0));
+
+			}
 			if (modelo.addCliente(c)) {
 				JOptionPane.showMessageDialog(null, "Client successfully updated", "Correct procedure",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -227,17 +251,17 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 			recargarTabla();
 
 		}
-		
+
 	}
 
 	private void closeEdit() {
-		
+
 		int opcion = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the window?", "Warning!",
 				JOptionPane.YES_NO_OPTION);
 		if (opcion == 0) {
 			vistaEdit.dispose();
 		}
-		
+
 	}
 
 	private void vistaEdit() {
@@ -253,13 +277,15 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 				Controlador.addJInternalFrame(vistaEdit);
 				Controlador.centrar(vistaEdit);
 			}
-			
+
+			vistaEdit.getLblFoto().addMouseListener(this);
+
 			vistaEdit.getBtnAdd().addActionListener(this);
 			vistaEdit.getBtnCancel().addActionListener(this);
-			
+
 			vistaEdit.getBtnAdd().setActionCommand("Edit customer");
 			vistaEdit.getBtnCancel().setActionCommand("Cancel edit");
-			
+
 			String[] carnetss = new String[] { "ALL", "A", "B", "C", "D", "E", "Z" };
 
 			Vector<String> carnets = new Vector<String>();
@@ -271,15 +297,16 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 			dcbCarnets.addAll(carnets);
 			dcbCarnets.setSelectedItem("ALL");
 			vistaEdit.getComboBox().setModel(dcbCarnets);
-			
+
 			int[] rows = new int[vista.getTable().getRowCount()];
 			rows = vista.getTable().getSelectedRows();
 			ArrayList<Cliente> clienteEdit = new ArrayList<Cliente>();
-			
+
 			clienteEdit = ((MyTableModel) vista.getTable().getModel()).get(rows);
-			
+
 			Cliente c = clienteEdit.get(0);
-			
+
+			vistaEdit.setImage(c.getFoto());
 			vistaEdit.getTxtFieldDNI().setText(c.getDNI());
 			vistaEdit.getTxtFieldName().setText(c.getNombre());
 			vistaEdit.getTxtFieldSurname().setText(c.getApellidos());
@@ -288,7 +315,7 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 			vistaEdit.getComboBox().setSelectedItem(String.valueOf(c.getCarnet()));
 			vistaEdit.getTxtFieldBirthday().setDate(c.getFechaNac());
 			vistaEdit.getTxtFieldCP().setText(c.getCP());
-			
+
 		}
 	}
 
@@ -312,14 +339,50 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 
 			java.sql.Date fechaNac = new java.sql.Date(vistaAddCliente.getTxtFieldBirthday().getDate().getTime());
 
-			Cliente c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0));
-			if (modelo.addCliente(c)) {
-				JOptionPane.showMessageDialog(null, "Customer created successfully", "Correct procedure",
-						JOptionPane.INFORMATION_MESSAGE);
-				vistaAddCliente.dispose();
-			}
+			if (cambiarFoto) {
 
-			recargarTabla();
+				byte[] imgNueva = imgFoto;
+
+				c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0), imgNueva);
+				cambiarFoto = false;
+				vistaAddCliente.setImage(imgNueva);
+
+			} else {
+
+				c = new Cliente(DNI, nombre, apellidos, domicilio, CP, email, fechaNac, license.charAt(0), null);
+
+			}
+			
+			for(Cliente cc : clientes) {
+				if (cc.getDNI().equals(c.getDNI())) {
+					iguales = true;
+				}
+			}
+			
+			if(iguales) {
+				
+				int opcion = JOptionPane.showConfirmDialog(null, "There is already a client with this DNI, "
+						+ "are you sure you want to replace it?", "Warning!",
+						JOptionPane.YES_NO_OPTION);
+				if (opcion == 0) {
+					if (modelo.addCliente(c)) {
+						JOptionPane.showMessageDialog(null, "Customer updated successfully", "Correct procedure",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaAddCliente.dispose();
+						recargarTabla();
+					}
+					
+				}
+				
+			}else {
+				
+				if (modelo.addCliente(c)) {
+					JOptionPane.showMessageDialog(null, "Customer created successfully", "Correct procedure",
+							JOptionPane.INFORMATION_MESSAGE);
+					vistaAddCliente.dispose();
+					recargarTabla();
+				}	
+			}
 
 		}
 
@@ -493,7 +556,40 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		System.out.println("e");
+		cambiarFoto();
+
+	}
+
+	private void cambiarFoto() {
+
+		JFileChooser jfc = new JFileChooser();
+		jfc.setFileFilter(new FileNameExtensionFilter("Img file", "jpg", "png", "jpeg"));
+
+		int opcion = jfc.showOpenDialog(vistaAddCliente);
+		if (opcion == JFileChooser.APPROVE_OPTION) {
+
+			try (InputStream inte = new FileInputStream(jfc.getSelectedFile())) {
+
+				imgFoto = new byte[(int) jfc.getSelectedFile().length()];
+				inte.read(imgFoto);
+				cambiarFoto = true;
+
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+			vistaEdit.setImage(imgFoto);
+			}catch (Exception e) {}
+			
+			try {
+				vistaAddCliente.setImage(imgFoto);
+			}catch (Exception e) {}
+		}
 
 	}
 

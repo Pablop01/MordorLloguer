@@ -258,7 +258,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
-		String query = "{call GESTIONALQUILER.grabarCliente(?,?,?,?,?,?,?,?)}";
+		String query = "{call GESTIONALQUILER.grabarCliente(?,?,?,?,?,?,?,?,?)}";
 
 		try (Connection con = ds.getConnection()) {
 
@@ -272,6 +272,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(6, cliente.getEmail());
 			pstmt.setDate(7, cliente.getFechaNac());
 			pstmt.setString(8, String.valueOf(cliente.getCarnet()));
+			pstmt.setBytes(9, cliente.getFoto());
 
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
