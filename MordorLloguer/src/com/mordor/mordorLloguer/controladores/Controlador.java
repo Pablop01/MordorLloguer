@@ -98,140 +98,138 @@ public class Controlador implements ActionListener {
 		} else if (comando.equals("Preferences")) {
 			preferences();
 		} else if (comando.equals("Tabla")) {
-			cargarTabla();	
-		} else if(comando.equals("Save Preferences")) {
+			cargarTabla();
+		} else if (comando.equals("Save Preferences")) {
 			savePreferences();
 		} else if (comando.equals("Cancelar carga")) {
 			task2.cancel(true);
-		} else if(comando.equals("Tabla cliente")) {
+		} else if (comando.equals("Tabla cliente")) {
 			cargarTablaClientes();
-		} else if(comando.equals("Vehiculos")) {
+		} else if (comando.equals("Vehiculos")) {
 			cargarTablaVehiculos();
 		}
 
 	}
 
 	private void cargarTablaVehiculos() {
-		
-	
-			if(!isOpen(vistaVehiculos)) {
+
+		if (!isOpen(vistaVehiculos)) {
 			vistaVehiculos = new vistaVehiculos();
+			ControladorVehiculos controladorVehiculos = new ControladorVehiculos(modelo, vistaVehiculos);
 			addJInternalFrame(vistaVehiculos);
 			centrar(vistaVehiculos);
-			
+
 		}
-		
+
 	}
 
 	private void cargarTablaClientes() {
-		
+
 		if (!isOpen(vistaCarga)) {
-			if(!isOpen(vistaTablaClientes)) {
-			vistaCarga = new vistaCarga("Loading the data from the database");
-			addJInternalFrame(vistaCarga);
-			centrar(vistaCarga);
-			
-			vistaCarga.getBtnCancel().addActionListener(this);
-			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+			if (!isOpen(vistaTablaClientes)) {
+				vistaCarga = new vistaCarga("Loading the data from the database");
+				addJInternalFrame(vistaCarga);
+				centrar(vistaCarga);
+
+				vistaCarga.getBtnCancel().addActionListener(this);
+				vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
 			}
 		}
-		
+
 		task3 = new SwingWorker<Void, Void>() {
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				
+
 				mostrarTablaClientes();
-				
+
 				return null;
-				
+
 			}
 
 			@Override
 			protected void done() {
-				
+
 				vistaCarga.dispose();
-				
+
 			}
 		};
 
 		task3.execute();
-		
+
 	}
-	
+
 	private void mostrarTablaClientes() {
-	
+
 		if (!isOpen(vistaTablaClientes)) {
 
 			vistaTablaClientes = new vistaTablaClientes();
-			ControladorClientes controladorClientes = new ControladorClientes(modelo,vistaTablaClientes);
+			ControladorClientes controladorClientes = new ControladorClientes(modelo, vistaTablaClientes);
 			controladorClientes.go();
 			addJInternalFrame(vistaTablaClientes);
 			centrar(vistaTablaClientes);
-			
+
 		}
-		
+
 	}
 
 	private void cargarTabla() {
-		
+
 		if (!isOpen(vistaCarga)) {
-			if(!isOpen(vistaTabla)) {
-			vistaCarga = new vistaCarga("Loading the data from the database");
-			addJInternalFrame(vistaCarga);
-			centrar(vistaCarga);
-			
-			vistaCarga.getBtnCancel().addActionListener(this);
-			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+			if (!isOpen(vistaTabla)) {
+				vistaCarga = new vistaCarga("Loading the data from the database");
+				addJInternalFrame(vistaCarga);
+				centrar(vistaCarga);
+
+				vistaCarga.getBtnCancel().addActionListener(this);
+				vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
 			}
 		}
-		
+
 		task2 = new SwingWorker<Void, Void>() {
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				
+
 				mostrarTabla();
-				
+
 				return null;
-				
+
 			}
 
 			@Override
 			protected void done() {
-				
+
 				vistaCarga.dispose();
-				
+
 			}
 		};
 
 		task2.execute();
-		
-		
+
 	}
 
 	private void savePreferences() {
-		
-		MyConfig.getInstance().setProperties(vistaPreferencias.getTxtFieldDriver().getText(), 
-				vistaPreferencias.getTxtFieldDireccion().getText(), 
-				vistaPreferencias.getTxtFieldUsuario().getText(), 
+
+		MyConfig.getInstance().setProperties(vistaPreferencias.getTxtFieldDriver().getText(),
+				vistaPreferencias.getTxtFieldDireccion().getText(), vistaPreferencias.getTxtFieldUsuario().getText(),
 				String.valueOf(vistaPreferencias.getPassfieldContraseña().getPassword()));
-		
+
 		JOptionPane.showMessageDialog(null, "Saved Correctly", "Saved Correctly", JOptionPane.INFORMATION_MESSAGE);
 		vistaPreferencias.dispose();
-		
+
 	}
 
 	private void mostrarTabla() {
-		
+
 		if (!isOpen(vistaTabla)) {
 
 			vistaTabla = new vistaTabla();
-			ControladorTabla controlador = new ControladorTabla(modelo,vistaTabla);
+			ControladorTabla controlador = new ControladorTabla(modelo, vistaTabla);
 			controlador.go();
 			addJInternalFrame(vistaTabla);
 			centrar(vistaTabla);
-			
+
 		}
 	}
 
@@ -275,23 +273,23 @@ public class Controlador implements ActionListener {
 			rellenarCampos();
 			addJInternalFrame(vistaPreferencias);
 		}
-		
+
 		Action action = new AbstractAction() {
-			
+
 			private static final long serialVersionUID = 1L;
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				savePreferences();
 			}
-			
+
 		};
-		
+
 		vistaPreferencias.getTxtFieldUsuario().setAction(action);
 		vistaPreferencias.getTxtFieldDireccion().setAction(action);
 		vistaPreferencias.getTxtFieldDriver().setAction(action);
 		vistaPreferencias.getPassfieldContraseña().setAction(action);
-		
+
 		vistaPreferencias.getBtnGuardar().addActionListener(this);
 		vistaPreferencias.getBtnGuardar().setActionCommand("Save Preferences");
 
@@ -317,34 +315,38 @@ public class Controlador implements ActionListener {
 	}
 
 	private void login() {
-		
+
 		vistaLogin.getProgressBar().setVisible(true);
 		vistaLogin.getLblError().setText("");
 		valido = false;
-		
+
 		task = new SwingWorker<Boolean, Void>() {
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
 
-				
-				
-				if(modelo.authenticate(vistaLogin.getTextField().getText(), String.valueOf(vistaLogin.getPasswordField().getPassword()))) {
+				if (modelo.authenticate(vistaLogin.getTextField().getText(),
+						String.valueOf(vistaLogin.getPasswordField().getPassword()))) {
 					valido = true;
-				} 
+				}
 
 				return valido;
 			}
 
 			@Override
 			protected void done() {
-				
-				if(valido) {
-					JOptionPane.showMessageDialog(null, "Session successfully started", "Rigth login", JOptionPane.INFORMATION_MESSAGE);
+
+				if (valido) {
+					JOptionPane.showMessageDialog(null, "Session successfully started", "Rigth login",
+							JOptionPane.INFORMATION_MESSAGE);
 					vistaLogin.dispose();
+
+					Empleado e = modelo.getEmpleadosPorDNI(vistaLogin.getTextField().getText());
+					vista.getLblBienvenido().setText("Bienvenid@, ");
+					vista.getLblNombre().setText(e.getNombre());
 					cambiarActivacionBotones(true);
 					vistaLogin.getProgressBar().setVisible(false);
-				}else {
+				} else {
 					vistaLogin.getProgressBar().setVisible(false);
 					vistaLogin.getLblError().setText("Incorrect username or password");
 				}
@@ -363,10 +365,13 @@ public class Controlador implements ActionListener {
 		vista.getBtnlogout().setEnabled(estado);
 		vista.getBtnTabla().setEnabled(estado);
 		vista.getBtnClientes().setEnabled(estado);
+		vista.getBtnVehiculos().setEnabled(estado);
 
 		if (!estado) {
 			JOptionPane.showMessageDialog(null, "Session closed successfully", "Rigth logout",
 					JOptionPane.INFORMATION_MESSAGE);
+			vista.getLblBienvenido().setText("");
+			vista.getLblNombre().setText("");
 		}
 
 	}
@@ -378,21 +383,21 @@ public class Controlador implements ActionListener {
 			vistaLogin = new vistaLogin();
 			addJInternalFrame(vistaLogin);
 			centrar(vistaLogin);
-			
+
 			Action action = new AbstractAction() {
-				
+
 				private static final long serialVersionUID = 1L;
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					login();
 				}
-				
+
 			};
-			
+
 			vistaLogin.getTextField().setAction(action);
 			vistaLogin.getPasswordField().setAction(action);
-			
+
 			vistaLogin.getBtnLogin().addActionListener(this);
 			vistaLogin.getBtnLogin().setActionCommand("Login");
 		}

@@ -10,7 +10,7 @@ public class Car extends Vehicle{
 	
 	
 	public Car(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, String carnet, int numPlazas, int numPuertas) {
+			double cilindrada, Date fechaadq, String estado, char carnet, int numPlazas, int numPuertas) {
 		super(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		
 		this.numPlazas = numPlazas;
@@ -32,7 +32,7 @@ public class Car extends Vehicle{
 
 	@Override
 	public String toString() {
-		return "Car [numPlazas=" + numPlazas + ", numPuertas=" + numPuertas + "]";
+		return "Car [matricula=" + matricula + ", numPlazas=" + numPlazas + ", numPuertas=" + numPuertas + "]";
 	}
 	
 }

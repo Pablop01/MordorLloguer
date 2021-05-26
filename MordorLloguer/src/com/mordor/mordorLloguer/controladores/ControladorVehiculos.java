@@ -3,6 +3,7 @@ package com.mordor.mordorLloguer.controladores;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import javax.swing.SwingWorker;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Empleado;
 import com.mordor.mordorLloguer.model.MyTableModel;
+import com.mordor.mordorLloguer.model.Vehicle;
 import com.mordor.mordorLloguer.vistas.vistaAdd;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
@@ -38,6 +40,8 @@ public class ControladorVehiculos implements ActionListener {
 
 	private void inicializar() {
 		
+		System.out.println(modelo.getCoches());
+		
 		vista.getPanelCar().getBtnAdd().addActionListener(this);
 		vista.getPanelVan().getBtnAdd().addActionListener(this);
 		vista.getPanelTruck().getBtnAdd().addActionListener(this);
@@ -54,7 +58,7 @@ public class ControladorVehiculos implements ActionListener {
 		vista.getPanelVan().getBtnEdit().addActionListener(this);
 		vista.getPanelTruck().getBtnEdit().addActionListener(this);
 		vista.getPanelMinibus().getBtnEdit().addActionListener(this);
-		
+
 		vista.getPanelCar().getBtnAdd().setActionCommand("Add");
 		vista.getPanelVan().getBtnAdd().setActionCommand("Add");
 		vista.getPanelTruck().getBtnAdd().setActionCommand("Add");
@@ -71,15 +75,12 @@ public class ControladorVehiculos implements ActionListener {
 		vista.getPanelVan().getBtnEdit().setActionCommand("Edit");
 		vista.getPanelTruck().getBtnEdit().setActionCommand("Edit");
 		vista.getPanelMinibus().getBtnEdit().setActionCommand("Edit");
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-		
-		
+
 	}
-	
-	
+
 }

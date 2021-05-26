@@ -16,5 +16,9 @@ public interface AlmacenDatosDB {
 	public ArrayList<Cliente> getClientes();
 	boolean deleteCliente(String dni);
 	boolean addCliente(Cliente cliente);
+	public ArrayList<Car> getCoches();
+	public ArrayList<Truck> getCamiones();
+	public ArrayList<Van> getFurgonetas();
+	public ArrayList<Minibus> getMinibus();
 	
 }

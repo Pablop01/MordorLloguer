@@ -13,10 +13,10 @@ public class Vehicle {
 	private double cilindrada;
 	private Date fechaadq;
 	private String estado;
-	private String carnet;
+	private char carnet;
 	
 	public Vehicle(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, String carnet) {
+			double cilindrada, Date fechaadq, String estado, char carnet) {
 		super();
 		this.matricula = matricula;
 		this.precioDia = precioDia;
@@ -66,7 +66,7 @@ public class Vehicle {
 		return estado;
 	}
 
-	public String getCarnet() {
+	public char getCarnet() {
 		return carnet;
 	}
 
