@@ -13,18 +13,18 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 
 	private WebTable table;
 
-	public final String[] HEADER;
+	public final List<String> HEADER;
 
 	List<T> data;
 
-	public MyTableModel(List<T> data, String[] header) {
+	public MyTableModel(List<T> data, List<String> header) {
 		this.data = data;
 		this.HEADER = header;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return HEADER.length;
+		return HEADER.size();
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 
 	@Override
 	public String getColumnName(int column) {
-		return HEADER[column];
+		return HEADER.get(column);
 	}
 
 	@Override

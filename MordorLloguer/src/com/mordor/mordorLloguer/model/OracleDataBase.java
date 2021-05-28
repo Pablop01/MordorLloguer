@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.sql.DataSource;
@@ -227,7 +229,6 @@ public class OracleDataBase implements AlmacenDatosDB {
 		return clientes;
 
 	}
-	
 
 	@Override
 	public boolean deleteCliente(String dni) {
@@ -291,158 +292,186 @@ public class OracleDataBase implements AlmacenDatosDB {
 	}
 
 	@Override
-	public ArrayList<Car> getCoches() {
-		
+	public ArrayList<Car> getCoches() throws ParseException {
+
 		ArrayList<Car> coches = new ArrayList<Car>();
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
-		String query = "{call ?:=GESTIONVEHICULOS.listarVehiculos('COCHE')}";
-		
+		String query = "{call GESTIONVEHICULOS.listarVehiculos(?,?)}";
+
 		try (Connection con = ds.getConnection()) {
 
+			Date fechaAdq;
+			SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+
 			CallableStatement cstmt = con.prepareCall(query);
-			
-			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
+
+			cstmt.registerOutParameter(2, OracleTypes.CURSOR);
+			cstmt.setString(1, "COCHE");
 
 			cstmt.execute();
-			
-			ResultSet rs = (ResultSet) cstmt.getObject(1);
-			
+
+			ResultSet rs = (ResultSet) cstmt.getObject(2);
+
 			Car car;
-			
+
+			rs.next();
+
+			String matricula;
+			double precioDia;
+			String marca;
+			String descripcion;
+			String color;
+			String motor;
+			double cilindrada;
+			Date fechaadq;
+			String estado;
+			char carnet;
+			int numPlazas;
+			int numPuertas;
+
 			while (rs.next()) {
 
-				car = new Car(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"), rs.getString("DESCRIPCION"),
-						rs.getString("COLOR"), rs.getString("MOTOR"), rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO")
-						, rs.getString("CARNET").charAt(0), rs.getInt("NUMPLAZAS"), rs.getInt("NUMPUERTAS"));
+				matricula = rs.getString("C1");
+				precioDia = rs.getDouble("N1");
+				marca = rs.getString("C2");
+				descripcion = rs.getString("C3");
+				color = rs.getString("C4");
+				motor = rs.getString("C5");
+				cilindrada = rs.getDouble("N2");
+				fechaadq = new Date(format.parse(rs.getString("C6")).getTime());
+				estado = rs.getString("C7");
+				carnet = rs.getString("C8").charAt(0);
+				numPlazas = rs.getInt("N3");
+				numPuertas = rs.getInt("N4");
+
+				car = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet, numPlazas, numPuertas);
 				coches.add(car);
-				
+
 			}
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return coches;
 	}
 
 	@Override
 	public ArrayList<Truck> getCamiones() {
-		
+
 		ArrayList<Truck> camiones = new ArrayList<Truck>();
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "{call ?:=GESTIONVEHICULOS.listarVehiculos('CAMION')}";
-		
+
 		try (Connection con = ds.getConnection()) {
 
 			CallableStatement cstmt = con.prepareCall(query);
-			
+
 			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
 
 			cstmt.execute();
-			
+
 			ResultSet rs = (ResultSet) cstmt.getObject(1);
-			
+
 			Truck truck;
-			
+
 			while (rs.next()) {
 
-				truck = new Truck(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"), rs.getString("DESCRIPCION"),
-						rs.getString("COLOR"), rs.getString("MOTOR"), rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO")
-						, rs.getString("CARNET").charAt(0), rs.getInt("NUMRUEDAS"), rs.getInt("MMA"));
+				truck = new Truck(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"),
+						rs.getString("DESCRIPCION"), rs.getString("COLOR"), rs.getString("MOTOR"),
+						rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO"),
+						rs.getString("CARNET").charAt(0), rs.getInt("NUMRUEDAS"), rs.getInt("MMA"));
 				camiones.add(truck);
-				
+
 			}
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return camiones;
-		
+
 	}
 
 	@Override
 	public ArrayList<Van> getFurgonetas() {
-		
+
 		ArrayList<Van> furgonetas = new ArrayList<Van>();
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "{call ?:=GESTIONVEHICULOS.listarVehiculos('FURGONETA')}";
-		
+
 		try (Connection con = ds.getConnection()) {
 
 			CallableStatement cstmt = con.prepareCall(query);
-			
+
 			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
 
 			cstmt.execute();
-			
-			ResultSet rs = (ResultSet) cstmt.getObject(1);
-			
+
+			ResultSet rs = (ResultSet) cstmt.getObject(0);
+
 			Van van;
-			
+
 			while (rs.next()) {
 
-				van = new Van(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"), rs.getString("DESCRIPCION"),
-						rs.getString("COLOR"), rs.getString("MOTOR"), rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO")
-						, rs.getString("CARNET").charAt(0), rs.getDouble("MMA"));
+				van = new Van(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"),
+						rs.getString("DESCRIPCION"), rs.getString("COLOR"), rs.getString("MOTOR"),
+						rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO"),
+						rs.getString("CARNET").charAt(0), rs.getDouble("MMA"));
 				furgonetas.add(van);
-				
+
 			}
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return furgonetas;
-		
+
 	}
 
 	@Override
 	public ArrayList<Minibus> getMinibus() {
-		
+
 		ArrayList<Minibus> buses = new ArrayList<Minibus>();
-		
+
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
 		String query = "{call ?:=GESTIONVEHICULOS.listarVehiculos('MICROBUS')}";
-		
+
 		try (Connection con = ds.getConnection()) {
 
 			CallableStatement cstmt = con.prepareCall(query);
-			
+
 			cstmt.registerOutParameter(1, OracleTypes.CURSOR);
 
 			cstmt.execute();
-			
+
 			ResultSet rs = (ResultSet) cstmt.getObject(1);
-			
+
 			Minibus minibus;
-			
+
 			while (rs.next()) {
 
-				minibus = new Minibus(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"), rs.getString("DESCRIPCION"),
-						rs.getString("COLOR"), rs.getString("MOTOR"), rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO")
-						, rs.getString("CARNET").charAt(0), rs.getInt("NUMPLAZAS"), rs.getDouble("MEDIDA"));
+				minibus = new Minibus(rs.getString("MATRICULA"), rs.getDouble("PRECIODIA"), rs.getString("MARCA"),
+						rs.getString("DESCRIPCION"), rs.getString("COLOR"), rs.getString("MOTOR"),
+						rs.getDouble("CILINDRADA"), rs.getDate("FECHAADQ"), rs.getString("ESTADO"),
+						rs.getString("CARNET").charAt(0), rs.getInt("NUMPLAZAS"), rs.getDouble("MEDIDA"));
 				buses.add(minibus);
-				
+
 			}
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return buses;
-		
+
 	}
 
 }

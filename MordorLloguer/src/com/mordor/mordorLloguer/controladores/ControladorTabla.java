@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -455,7 +456,7 @@ public class ControladorTabla implements ActionListener {
 		private List<Empleado> data;
 
 		public MyEmployeeTableModel(List<Empleado> data, String[] header) {
-			super(data, header);
+			super(data, Arrays.asList(new String[]{ "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "Nacimiento", "Cargo" }));
 			this.data = data;
 		}
 

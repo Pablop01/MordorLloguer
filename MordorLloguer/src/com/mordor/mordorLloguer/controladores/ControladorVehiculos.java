@@ -13,6 +13,7 @@ import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
 import com.mordor.mordorLloguer.model.Empleado;
+import com.mordor.mordorLloguer.model.MyCarTableModel;
 import com.mordor.mordorLloguer.model.MyTableModel;
 import com.mordor.mordorLloguer.model.Vehicle;
 import com.mordor.mordorLloguer.vistas.vistaAdd;
@@ -39,9 +40,7 @@ public class ControladorVehiculos implements ActionListener {
 	}
 
 	private void inicializar() {
-		
-		System.out.println(modelo.getCoches());
-		
+
 		vista.getPanelCar().getBtnAdd().addActionListener(this);
 		vista.getPanelVan().getBtnAdd().addActionListener(this);
 		vista.getPanelTruck().getBtnAdd().addActionListener(this);
@@ -75,12 +74,19 @@ public class ControladorVehiculos implements ActionListener {
 		vista.getPanelVan().getBtnEdit().setActionCommand("Edit");
 		vista.getPanelTruck().getBtnEdit().setActionCommand("Edit");
 		vista.getPanelMinibus().getBtnEdit().setActionCommand("Edit");
-
+		
+		try {
+		
+			MyCarTableModel carTable = new MyCarTableModel(modelo.getCoches());
+			vista.getPanelCar().getTable().setModel(carTable);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
 	}
-
 }

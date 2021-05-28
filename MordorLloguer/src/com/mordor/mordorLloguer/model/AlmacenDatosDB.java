@@ -1,6 +1,7 @@
 package com.mordor.mordorLloguer.model;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 public interface AlmacenDatosDB {
@@ -16,7 +17,7 @@ public interface AlmacenDatosDB {
 	public ArrayList<Cliente> getClientes();
 	boolean deleteCliente(String dni);
 	boolean addCliente(Cliente cliente);
-	public ArrayList<Car> getCoches();
+	public ArrayList<Car> getCoches() throws ParseException;
 	public ArrayList<Truck> getCamiones();
 	public ArrayList<Van> getFurgonetas();
 	public ArrayList<Minibus> getMinibus();

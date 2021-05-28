@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -57,8 +58,7 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 	private boolean cambiarFoto = false;
 	private boolean iguales = false;
 	private Cliente c;
-	String[] header = { "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "Nacimiento", "Carnet" };
-
+	
 	public ControladorClientes(AlmacenDatosDB modelo, vistaTablaClientes vista) {
 
 		this.modelo = modelo;
@@ -113,7 +113,7 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 
 	private void rellenarTabla() {
 
-		MyCustomerTableModel tabla = new MyCustomerTableModel(clientes, header);
+		MyCustomerTableModel tabla = new MyCustomerTableModel(clientes);
 
 		vista.getTable().setModel(tabla);
 
@@ -139,8 +139,8 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 
 		private List<Cliente> data;
 
-		public MyCustomerTableModel(List<Cliente> data, String[] header) {
-			super(data, header);
+		public MyCustomerTableModel(List<Cliente> data) {
+			super(data, Arrays.asList(new String[]{ "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "Nacimiento", "Carnet" }));
 			this.data = data;
 		}
 
@@ -528,7 +528,7 @@ public class ControladorClientes implements ActionListener, DocumentListener, Mo
 						|| vista.getComboBox().getSelectedItem().toString().equals("ALL"))
 				.collect(Collectors.toList());
 
-		MyCustomerTableModel tabla = new MyCustomerTableModel(temp, header);
+		MyCustomerTableModel tabla = new MyCustomerTableModel(temp);
 		vista.getTable().setModel(tabla);
 
 	}

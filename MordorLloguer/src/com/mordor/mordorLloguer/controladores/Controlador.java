@@ -342,7 +342,7 @@ public class Controlador implements ActionListener {
 					vistaLogin.dispose();
 
 					Empleado e = modelo.getEmpleadosPorDNI(vistaLogin.getTextField().getText());
-					vista.getLblBienvenido().setText("Bienvenid@, ");
+					vista.getLblBienvenido().setText("Hola, ");
 					vista.getLblNombre().setText(e.getNombre());
 					cambiarActivacionBotones(true);
 					vistaLogin.getProgressBar().setVisible(false);
