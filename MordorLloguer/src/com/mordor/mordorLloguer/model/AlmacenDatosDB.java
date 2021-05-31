@@ -18,8 +18,8 @@ public interface AlmacenDatosDB {
 	boolean deleteCliente(String dni);
 	boolean addCliente(Cliente cliente);
 	public ArrayList<Car> getCoches() throws ParseException;
-	public ArrayList<Truck> getCamiones();
-	public ArrayList<Van> getFurgonetas();
-	public ArrayList<Minibus> getMinibus();
+	public ArrayList<Truck> getCamiones() throws ParseException;
+	public ArrayList<Van> getFurgonetas() throws ParseException;
+	public ArrayList<Minibus> getMinibus() throws ParseException;
 	
 }

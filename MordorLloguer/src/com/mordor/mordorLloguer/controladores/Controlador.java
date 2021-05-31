@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -20,8 +22,16 @@ import javax.swing.SwingWorker;
 
 import com.mordor.mordorLloguer.config.MyConfig;
 import com.mordor.mordorLloguer.model.AlmacenDatosDB;
+import com.mordor.mordorLloguer.model.Car;
 import com.mordor.mordorLloguer.model.Empleado;
+import com.mordor.mordorLloguer.model.Minibus;
+import com.mordor.mordorLloguer.model.MyBusTableModel;
+import com.mordor.mordorLloguer.model.MyCarTableModel;
 import com.mordor.mordorLloguer.model.MyDataSourceOracle;
+import com.mordor.mordorLloguer.model.MyTruckTableModel;
+import com.mordor.mordorLloguer.model.MyVanTableModel;
+import com.mordor.mordorLloguer.model.Truck;
+import com.mordor.mordorLloguer.model.Van;
 import com.mordor.mordorLloguer.vistas.vistaLogin;
 import com.mordor.mordorLloguer.vistas.vistaPrincipal;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
@@ -38,14 +48,19 @@ public class Controlador implements ActionListener {
 	private vistaTabla vistaTabla;
 	private vistaCarga vistaCarga;
 	private vistaTablaClientes vistaTablaClientes;
-	private vistaVehiculos vistaVehiculos;
+	private vistaVehiculos vistaVehiculos = new vistaVehiculos();
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
 	private SwingWorker<Void, Void> task2;
 	private SwingWorker<Void, Void> task3;
+	private SwingWorker<Void, Integer> taskVehiculos;
 	private boolean valido;
-
+	private static ArrayList<Car> coches;
+	private static ArrayList<Van> furgonetas;
+	private static ArrayList<Truck> camiones;
+	private static ArrayList<Minibus> buses;
+	
 	public Controlador(vistaPrincipal vista, AlmacenDatosDB modelo) {
 
 		super();
@@ -112,15 +127,85 @@ public class Controlador implements ActionListener {
 	}
 
 	private void cargarTablaVehiculos() {
+		
+		if (!Controlador.isOpen(vistaCarga)) {
+			vistaCarga = new vistaCarga("Loading the data from the database");
+			vistaCarga.getProgressBar().setIndeterminate(false);
+			Controlador.addJInternalFrame(vistaCarga);
+			Controlador.centrar(vistaCarga);
 
+			vistaCarga.getBtnCancel().addActionListener(this);
+			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+		}
+		
+		taskVehiculos = new SwingWorker<Void, Integer>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+
+				int i = 0;
+				try {
+					coches = modelo.getCoches();
+					publish(++i);
+					furgonetas = modelo.getFurgonetas();
+					publish(++i);
+					camiones = modelo.getCamiones();
+					publish(++i);
+					buses = modelo.getMinibus();
+					publish(++i);
+					mostrarTablaVehiculos();
+						
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+
+				return null;
+
+			}
+			
+			@Override
+			protected void process(List<Integer> chunk) {
+				
+				vistaCarga.getProgressBar().setValue(chunk.get(0)*25);
+				vistaCarga.getLblNewLabel().setText("Loading the data from the database. " + chunk.get(0) + "/4");
+				
+			}
+
+			@Override
+			protected void done() {
+
+				vistaCarga.dispose();
+
+			}
+		};
+
+		taskVehiculos.execute();
+		
+		
+
+	}
+	
+	private void mostrarTablaVehiculos() throws ParseException {
+		
+		
 		if (!isOpen(vistaVehiculos)) {
 			vistaVehiculos = new vistaVehiculos();
 			ControladorVehiculos controladorVehiculos = new ControladorVehiculos(modelo, vistaVehiculos);
+			MyCarTableModel carTable = new MyCarTableModel(coches);
+			vistaVehiculos.getPanelCar().getTable().setModel(carTable);
+
+			MyVanTableModel vanTable = new MyVanTableModel(furgonetas);
+			vistaVehiculos.getPanelVan().getTable().setModel(vanTable);
+
+			MyTruckTableModel truckTable = new MyTruckTableModel(camiones);
+			vistaVehiculos.getPanelTruck().getTable().setModel(truckTable);
+
+			MyBusTableModel busTable = new MyBusTableModel(buses);
+			vistaVehiculos.getPanelMinibus().getTable().setModel(busTable);
 			addJInternalFrame(vistaVehiculos);
 			centrar(vistaVehiculos);
-
 		}
-
 	}
 
 	private void cargarTablaClientes() {
@@ -403,5 +488,23 @@ public class Controlador implements ActionListener {
 		}
 
 	}
+
+	public static ArrayList<Car> getCoches() {
+		return coches;
+	}
+
+	public static ArrayList<Van> getFurgonetas() {
+		return furgonetas;
+	}
+
+	public static ArrayList<Truck> getCamiones() {
+		return camiones;
+	}
+
+	public static ArrayList<Minibus> getBuses() {
+		return buses;
+	}
+	
+	
 
 }

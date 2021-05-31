@@ -1,13 +1,14 @@
 package com.mordor.mordorLloguer.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MyVehicleTableModel<T extends Vehicle> extends MyTableModel<T> {
 
 	public MyVehicleTableModel(List<T> data) {
-		super(data, Arrays
-				.asList(new String[] { "Matricula", "Marca", "Color", "Motor", "Cilindrada", "Estado", "Carnet" }));
+		super(data, new ArrayList<String>(Arrays
+				.asList(new String[] { "Matricula", "Marca", "Color", "Motor", "Cilindrada", "Estado", "Carnet" })));
 		// TODO Auto-generated constructor stub
 	}
 

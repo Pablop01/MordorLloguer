@@ -13,47 +13,54 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import com.alee.laf.table.WebTable;
 
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 
 public class JPVehicle extends JPanel{
 	private JComboBox comboBoxLicense;
 	private JComboBox comboBoxEngine;
 	private JTextField txtFieldRegistration;
 	private JTextField textField;
-	private WebTable table;
 	private JButton btnCancel;
 	private JButton btnEdit;
 	private JButton btnDelete;
 	private JButton btnAdd;
+	private JScrollPane scrollPane;
+	private WebTable table;
+	private JPanel panelInferior;
+	private JPanel panelSuperior;
 	public JPVehicle() {
 		
-		JPanel panel = new JPanel();
+		panelSuperior = new JPanel();
 		
-		table = new WebTable();
+		panelInferior = new JPanel();
 		
-		JPanel panel_1 = new JPanel();
+		scrollPane = new JScrollPane();
 		GroupLayout groupLayout = new GroupLayout(this);
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(panel_1, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, groupLayout.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(panel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)
-							.addComponent(table, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 657, Short.MAX_VALUE)))
-					.addContainerGap(27, Short.MAX_VALUE))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addComponent(panelInferior, 0, 0, Short.MAX_VALUE)
+						.addComponent(panelSuperior, GroupLayout.PREFERRED_SIZE, 657, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 655, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panelSuperior, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(table, GroupLayout.PREFERRED_SIZE, 312, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(42, Short.MAX_VALUE))
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
+					.addGap(10)
+					.addComponent(panelInferior, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
+		
+		table = new WebTable();
+		table.setRowHeight(25);
+		scrollPane.setViewportView(table);
 		
 		btnCancel = new JButton("Cancel");
 		
@@ -62,10 +69,10 @@ public class JPVehicle extends JPanel{
 		btnDelete = new JButton("Delete");
 		
 		btnAdd = new JButton("Add");
-		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
-		gl_panel_1.setHorizontalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+		GroupLayout gl_panelInferior = new GroupLayout(panelInferior);
+		gl_panelInferior.setHorizontalGroup(
+			gl_panelInferior.createParallelGroup(Alignment.LEADING)
+				.addGroup(Alignment.TRAILING, gl_panelInferior.createSequentialGroup()
 					.addContainerGap(287, Short.MAX_VALUE)
 					.addComponent(btnAdd)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -76,45 +83,45 @@ public class JPVehicle extends JPanel{
 					.addComponent(btnCancel)
 					.addContainerGap())
 		);
-		gl_panel_1.setVerticalGroup(
-			gl_panel_1.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_1.createSequentialGroup()
+		gl_panelInferior.setVerticalGroup(
+			gl_panelInferior.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panelInferior.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+					.addGroup(gl_panelInferior.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnCancel)
 						.addComponent(btnEdit)
 						.addComponent(btnDelete)
 						.addComponent(btnAdd))
 					.addContainerGap(43, Short.MAX_VALUE))
 		);
-		panel_1.setLayout(gl_panel_1);
-		panel.setLayout(new MigLayout("", "[][grow][][grow][grow][48.00][50.00][grow][][][grow]", "[]"));
+		panelInferior.setLayout(gl_panelInferior);
+		panelSuperior.setLayout(new MigLayout("", "[][grow][][grow][grow][48.00][50.00][grow][][][grow]", "[]"));
 		
 		JLabel lblRegistration = new JLabel("Registration");
-		panel.add(lblRegistration, "cell 0 0,alignx trailing");
+		panelSuperior.add(lblRegistration, "cell 0 0,alignx trailing");
 		
 		txtFieldRegistration = new JTextField();
-		panel.add(txtFieldRegistration, "cell 1 0,growx");
+		panelSuperior.add(txtFieldRegistration, "cell 1 0,growx");
 		txtFieldRegistration.setColumns(10);
 		
 		JLabel lblModel = new JLabel("Model");
-		panel.add(lblModel, "cell 2 0,alignx trailing");
+		panelSuperior.add(lblModel, "cell 2 0,alignx trailing");
 		
 		textField = new JTextField();
-		panel.add(textField, "cell 3 0 4 1,growx");
+		panelSuperior.add(textField, "cell 3 0 4 1,growx");
 		textField.setColumns(10);
 		
 		JLabel lblEngine = new JLabel("Engine");
-		panel.add(lblEngine, "cell 7 0,alignx trailing");
+		panelSuperior.add(lblEngine, "cell 7 0,alignx trailing");
 		
 		comboBoxEngine = new JComboBox();
-		panel.add(comboBoxEngine, "cell 8 0,alignx left");
+		panelSuperior.add(comboBoxEngine, "cell 8 0,alignx left");
 		
 		JLabel lblLicense = new JLabel("License");
-		panel.add(lblLicense, "cell 9 0,alignx trailing");
+		panelSuperior.add(lblLicense, "cell 9 0,alignx trailing");
 		
 		comboBoxLicense = new JComboBox();
-		panel.add(comboBoxLicense, "cell 10 0,alignx left");
+		panelSuperior.add(comboBoxLicense, "cell 10 0,alignx left");
 		setLayout(groupLayout);
 	}
 	public WebTable getTable() {
@@ -147,7 +154,11 @@ public class JPVehicle extends JPanel{
 	public JButton getBtnAdd() {
 		return btnAdd;
 	}
-	
-	
+	public JPanel getPanelInferior() {
+		return panelInferior;
+	}
+	public JPanel getPanelSuperior() {
+		return panelSuperior;
+	}
 	
 }

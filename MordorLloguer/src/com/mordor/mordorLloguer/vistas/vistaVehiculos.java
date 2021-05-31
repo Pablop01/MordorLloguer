@@ -6,6 +6,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
 
 public class vistaVehiculos extends JInternalFrame {
 	
@@ -20,18 +21,18 @@ public class vistaVehiculos extends JInternalFrame {
 		setFrameIcon(new ImageIcon(vistaVehiculos.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		setClosable(true);
 		setBounds(100, 100, 705, 500);
-
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-
-		panelCar = new JPVehicle();
-		tabbedPane.addTab("Car", null, panelCar, null);
-		panelVan = new JPVehicle();
-		tabbedPane.addTab("Van", null, panelVan, null);
-		panelTruck = new JPVehicle();
-		tabbedPane.addTab("Truck", null, panelTruck, null);
-		panelMinibus = new JPVehicle();
-		tabbedPane.addTab("Minibus", null, panelMinibus, null);
+						
+								JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+								getContentPane().add(tabbedPane, BorderLayout.CENTER);
+								
+										panelCar = new JPVehicle();
+										tabbedPane.addTab("Car", null, panelCar, null);
+										panelVan = new JPVehicle();
+										tabbedPane.addTab("Van", null, panelVan, null);
+										panelTruck = new JPVehicle();
+										tabbedPane.addTab("Truck", null, panelTruck, null);
+										panelMinibus = new JPVehicle();
+										tabbedPane.addTab("Minibus", null, panelMinibus, null);
 
 	}
 	public JPVehicle getPanelCar() {

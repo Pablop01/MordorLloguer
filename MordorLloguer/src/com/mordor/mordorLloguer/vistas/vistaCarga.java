@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 
 public class vistaCarga extends JInternalFrame {
 	private JButton btnCancel;
+	private JProgressBar progressBar;
+	private JLabel lblNewLabel;
 	/**
 	 * Create the frame.
 	 */
@@ -24,13 +26,13 @@ public class vistaCarga extends JInternalFrame {
 		setBounds(100, 100, 390, 170);
 		getContentPane().setLayout(new MigLayout("", "[378.00]", "[][][][][][]"));
 		
-		JLabel lblNewLabel = new JLabel(text);
+		lblNewLabel = new JLabel(text);
 		getContentPane().add(lblNewLabel, "cell 0 0,alignx center");
 		
 		JLabel lblPleaseWait = new JLabel("Please wait");
 		getContentPane().add(lblPleaseWait, "cell 0 1,alignx center");
 		
-		JProgressBar progressBar = new JProgressBar();
+		progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
 		getContentPane().add(progressBar, "cell 0 3,growx");
 		
@@ -41,6 +43,11 @@ public class vistaCarga extends JInternalFrame {
 	public JButton getBtnCancel() {
 		return btnCancel;
 	}
-	
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
+	public JLabel getLblNewLabel() {
+		return lblNewLabel;
+	}
 	
 }
