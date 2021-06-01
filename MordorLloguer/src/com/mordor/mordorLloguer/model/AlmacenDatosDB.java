@@ -21,5 +21,10 @@ public interface AlmacenDatosDB {
 	public ArrayList<Truck> getCamiones() throws ParseException;
 	public ArrayList<Van> getFurgonetas() throws ParseException;
 	public ArrayList<Minibus> getMinibus() throws ParseException;
+	boolean deleteCar(Car car);
+	boolean deleteVan(Van van);
+	boolean deleteTruck(Truck truck);
+	boolean deleteBus(Minibus bus);
+	boolean addCar(Car car);
 	
 }

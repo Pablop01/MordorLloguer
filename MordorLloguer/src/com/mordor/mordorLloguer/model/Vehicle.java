@@ -30,6 +30,21 @@ public class Vehicle {
 		this.carnet = carnet;
 	}
 
+	public Vehicle(String matricula, double precioDia, String marca, String color, String motor, Date fechaadq,
+			String estado, char carnet) {
+		super();
+		this.matricula = matricula;
+		this.precioDia = precioDia;
+		this.marca = marca;
+		this.color = color;
+		this.motor = motor;
+		this.fechaadq = fechaadq;
+		this.estado = estado;
+		this.carnet = carnet;
+	}
+
+
+
 	public String getMatricula() {
 		return matricula;
 	}

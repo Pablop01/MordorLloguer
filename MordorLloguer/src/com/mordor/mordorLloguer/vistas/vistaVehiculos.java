@@ -33,6 +33,7 @@ public class vistaVehiculos extends JInternalFrame {
 										tabbedPane.addTab("Truck", null, panelTruck, null);
 										panelMinibus = new JPVehicle();
 										tabbedPane.addTab("Minibus", null, panelMinibus, null);
+										
 
 	}
 	public JPVehicle getPanelCar() {

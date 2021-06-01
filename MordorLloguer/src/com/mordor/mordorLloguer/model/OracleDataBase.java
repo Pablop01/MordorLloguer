@@ -555,4 +555,150 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	}
 
+	@Override
+	public boolean deleteCar(Car car) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.eliminarCoche(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, car.getMatricula());
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean deleteVan(Van van) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.eliminarFurgoneta(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, van.getMatricula());
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean deleteTruck(Truck truck) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.eliminarCamion(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, truck.getMatricula());
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean deleteBus(Minibus bus) {
+
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.eliminarMicroBus(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, bus.getMatricula());
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean addCar(Car car) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.insertarCoche(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, car.getMatricula());
+			pstmt.setDouble(2, car.getPrecioDia());
+			pstmt.setString(3, car.getMarca());
+			pstmt.setString(4, car.getDescripcion());
+			pstmt.setString(5, car.getColor());
+			pstmt.setString(6, car.getMotor());
+			pstmt.setDouble(7, car.getCilindrada());
+			pstmt.setDate(8, car.getFechaadq());
+			pstmt.setString(9, car.getEstado());
+			pstmt.setString(10, String.valueOf(car.getCarnet()));
+			pstmt.setInt(11, car.getNumPlazas());
+			pstmt.setInt(12, car.getNumPuertas());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
 }
