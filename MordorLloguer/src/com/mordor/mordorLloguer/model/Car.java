@@ -10,7 +10,7 @@ public class Car extends Vehicle{
 	
 	
 	public Car(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet, int numPlazas, int numPuertas) {
+			Double cilindrada, Date fechaadq, String estado, char carnet, int numPlazas, int numPuertas) {
 		super(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		
 		this.numPlazas = numPlazas;
@@ -19,16 +19,7 @@ public class Car extends Vehicle{
 		
 	}
 
-	
 
-	public Car(String matricula, double precioDia, String marca,  String color, String motor,
-			 Date fechaadq, String estado, char carnet,  int numPlazas,
-			int numPuertas) {
-		super(matricula, precioDia, marca,  color, motor, fechaadq, estado, carnet);
-		matricula = matricula;
-		this.numPlazas = numPlazas;
-		this.numPuertas = numPuertas;
-	}
 
 
 

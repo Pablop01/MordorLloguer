@@ -1,6 +1,7 @@
 package com.mordor.mordorLloguer.model;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -25,6 +26,13 @@ public interface AlmacenDatosDB {
 	boolean deleteVan(Van van);
 	boolean deleteTruck(Truck truck);
 	boolean deleteBus(Minibus bus);
-	boolean addCar(Car car);
+	boolean addCar(Car car) throws SQLException;
+	boolean addVan(Van van) throws SQLException;
+	boolean addTruck(Truck truck) throws SQLException;
+	boolean addBus(Minibus bus) throws SQLException;
+	boolean editCar(Car car);
+	boolean editVan(Van van);
+	boolean editTruck(Truck truck);
+	boolean editBus(Minibus bus);
 	
 }

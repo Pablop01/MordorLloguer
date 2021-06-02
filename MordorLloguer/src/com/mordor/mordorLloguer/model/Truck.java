@@ -9,7 +9,7 @@ public class Truck extends Vehicle{
 	private int mma;
 	
 	public Truck(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet, int numRuedas, int mma) {
+			Double cilindrada, Date fechaadq, String estado, char carnet, int numRuedas, int mma) {
 		super(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		this.matricula = super.getMatricula();
 		this.numRuedas = numRuedas;

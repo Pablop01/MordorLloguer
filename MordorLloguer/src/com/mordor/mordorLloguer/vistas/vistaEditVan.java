@@ -17,11 +17,10 @@ import com.alee.extended.date.WebDateField;
 
 import javax.swing.ImageIcon;
 
-public class vistaAddCar extends JInternalFrame {
+public class vistaEditVan extends JInternalFrame {
 	private JTextField txtFieldCilindrada;
 	private WebDateField txtFieldDate;
-	private JTextField txtFieldNumPlazas;
-	private JTextField txtFieldNumPuertas;
+	private JTextField txtFieldMMA;
 	private JTextField txtFieldMatricula;
 	private JTextField txtFieldPrecio;
 	private JTextField txtFieldMarca;
@@ -36,8 +35,8 @@ public class vistaAddCar extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public vistaAddCar() {
-		setFrameIcon(new ImageIcon(vistaAddCar.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
+	public vistaEditVan() {
+		setFrameIcon(new ImageIcon(vistaEditVan.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		setClosable(true);
 		setBounds(100, 100, 656, 325);
 		getContentPane().setLayout(new MigLayout("", "[90.00,left][grow][][][left][grow]", "[][][][][][][][][][][][grow]"));
@@ -102,12 +101,12 @@ public class vistaAddCar extends JInternalFrame {
 		getContentPane().add(txtFieldColor, "cell 1 8,growx");
 		txtFieldColor.setColumns(10);
 		
-		JLabel lblNumplazas = new JLabel("NumPlazas:*");
+		JLabel lblNumplazas = new JLabel("MMA:*");
 		getContentPane().add(lblNumplazas, "cell 4 8,alignx trailing");
 		
-		txtFieldNumPlazas = new JTextField();
-		getContentPane().add(txtFieldNumPlazas, "cell 5 8,growx");
-		txtFieldNumPlazas.setColumns(10);
+		txtFieldMMA = new JTextField();
+		getContentPane().add(txtFieldMMA, "cell 5 8,growx");
+		txtFieldMMA.setColumns(10);
 		
 		JLabel lblMotor = new JLabel("Motor:*");
 		getContentPane().add(lblMotor, "cell 0 10,alignx left");
@@ -115,17 +114,10 @@ public class vistaAddCar extends JInternalFrame {
 		comboBoxMotor = new JComboBox();
 		getContentPane().add(comboBoxMotor, "cell 1 10,growx");
 		
-		JLabel lblNumpuertas = new JLabel("NumPuertas:*");
-		getContentPane().add(lblNumpuertas, "cell 4 10,alignx trailing");
-		
-		txtFieldNumPuertas = new JTextField();
-		getContentPane().add(txtFieldNumPuertas, "cell 5 10,growx");
-		txtFieldNumPuertas.setColumns(10);
-		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, "cell 0 11 6 1,grow");
 		
-		btnAdd = new JButton("Add");
+		btnAdd = new JButton("Edit");
 		
 		btnCancel = new JButton("Cancel");
 		GroupLayout gl_panel = new GroupLayout(panel);
@@ -158,12 +150,8 @@ public class vistaAddCar extends JInternalFrame {
 		return txtFieldDate;
 	}
 
-	public JTextField getTxtFieldNumPlazas() {
-		return txtFieldNumPlazas;
-	}
-
-	public JTextField getTxtFieldNumPuertas() {
-		return txtFieldNumPuertas;
+	public JTextField getTxtFielMMA() {
+		return txtFieldMMA;
 	}
 
 	public JTextField getTxtFieldMatricula() {

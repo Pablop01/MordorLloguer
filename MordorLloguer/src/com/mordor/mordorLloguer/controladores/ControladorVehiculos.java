@@ -34,17 +34,19 @@ import com.mordor.mordorLloguer.model.Van;
 import com.mordor.mordorLloguer.model.Vehicle;
 import com.mordor.mordorLloguer.vistas.vistaAdd;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
+import com.mordor.mordorLloguer.vistas.vistaEdit;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaVehiculos;
 import com.mordor.mordorLloguer.vistas.vistaAddCar;
-import com.mordor.mordorLloguer.vistas.vistaAddCliente;
+import com.mordor.mordorLloguer.vistas.vistaEditCar;
+import com.mordor.mordorLloguer.vistas.vistaAddVan;
+import com.mordor.mordorLloguer.vistas.vistaEditVan;
 
 public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 	private AlmacenDatosDB modelo;
 	private vistaVehiculos vista;
 	private vistaCarga vistaCarga;
-	private vistaAdd vistaAdd;
 	private ArrayList<Car> coches;
 	private ArrayList<Minibus> buses;
 	private ArrayList<Van> furgonetas;
@@ -69,9 +71,15 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 	private SwingWorker<Boolean, Void> task2;
 	private SwingWorker<Boolean, Void> task3;
 	private SwingWorker<Boolean, Void> task4;
+	private SwingWorker<Void, Void> task5;
+	private SwingWorker<Void, Void> task6;
 	private vistaAddCar vistaAddCar;
+	private vistaEditCar vistaEditCar;
+	private vistaAddVan vistaAddVan;
+	private vistaEditVan vistaEditVan;
 	private DefaultComboBoxModel dcbCarnetsAdd;
 	private DefaultComboBoxModel dcbEstadoAdd;
+	private DefaultComboBoxModel dcbMotorAdd;
 	String[] header = { "DNI", "Nombre", "Apellidos", "Domicilio", "CP", "Email", "Nacimiento", "Cargo" };
 
 	public ControladorVehiculos(AlmacenDatosDB modelo, vistaVehiculos vista) {
@@ -109,10 +117,10 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		vista.getPanelVan().getBtnAdd().setActionCommand("Add van");
 		vista.getPanelTruck().getBtnAdd().setActionCommand("Add truck");
 		vista.getPanelMinibus().getBtnAdd().setActionCommand("Add bus");
-		vista.getPanelCar().getBtnCancel().setActionCommand("Cancel car");
-		vista.getPanelVan().getBtnCancel().setActionCommand("Cancel van");
-		vista.getPanelTruck().getBtnCancel().setActionCommand("Cancel truck");
-		vista.getPanelMinibus().getBtnCancel().setActionCommand("Cancel bus");
+		vista.getPanelCar().getBtnCancel().setActionCommand("Cancel");
+		vista.getPanelVan().getBtnCancel().setActionCommand("Cancel");
+		vista.getPanelTruck().getBtnCancel().setActionCommand("Cancel");
+		vista.getPanelMinibus().getBtnCancel().setActionCommand("Cancel");
 		vista.getPanelCar().getBtnDelete().setActionCommand("Delete car");
 		vista.getPanelVan().getBtnDelete().setActionCommand("Delete van");
 		vista.getPanelTruck().getBtnDelete().setActionCommand("Delete truck");
@@ -179,6 +187,37 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		rellenarComboEngineBus();
 		rellenarComboCarnetBus();
 
+	}
+
+	private void rellenarTablaCar() {
+
+		MyCarTableModel tabla = new MyCarTableModel(coches);
+
+		vista.getPanelCar().getTable().setModel(tabla);
+
+	}
+
+	private void rellenarTablaVan() {
+
+		MyVanTableModel tabla = new MyVanTableModel(furgonetas);
+
+		vista.getPanelVan().getTable().setModel(tabla);
+
+	}
+
+	private void rellenarTablaTruck() {
+
+		MyTruckTableModel tabla = new MyTruckTableModel(camiones);
+
+		vista.getPanelTruck().getTable().setModel(tabla);
+
+	}
+
+	private void rellenarTablaBus() {
+
+		MyBusTableModel tabla = new MyBusTableModel(buses);
+
+		vista.getPanelMinibus().getTable().setModel(tabla);
 
 	}
 
@@ -235,7 +274,8 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 				.filter((c) -> c.getMotor().toUpperCase().contains(
 						String.valueOf(vista.getPanelCar().getComboBoxEngine().getSelectedItem()).toUpperCase())
 						|| vista.getPanelCar().getComboBoxEngine().getSelectedItem().toString().equals("ALL"))
-				.filter((c) -> String.valueOf(c.getCarnet()).toUpperCase().contains(String.valueOf(vista.getPanelCar().getComboBoxLicense().getSelectedItem()).toUpperCase())
+				.filter((c) -> String.valueOf(c.getCarnet()).toUpperCase().contains(
+						String.valueOf(vista.getPanelCar().getComboBoxLicense().getSelectedItem()).toUpperCase())
 						|| vista.getPanelCar().getComboBoxLicense().getSelectedItem().toString().equals("ALL"))
 				.collect(Collectors.toList());
 
@@ -336,7 +376,7 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 			if (!carnetVan.contains(carnet)) {
 				carnetVan.add(carnet);
-				
+
 			}
 		}
 
@@ -358,7 +398,8 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 				.filter((c) -> c.getMotor().toUpperCase().contains(
 						String.valueOf(vista.getPanelVan().getComboBoxEngine().getSelectedItem()).toUpperCase())
 						|| vista.getPanelVan().getComboBoxEngine().getSelectedItem().toString().equals("ALL"))
-				.filter((c) -> String.valueOf(c.getCarnet()).contains(String.valueOf(vista.getPanelVan().getComboBoxLicense().getSelectedItem()).toUpperCase())
+				.filter((c) -> String.valueOf(c.getCarnet()).contains(
+						String.valueOf(vista.getPanelVan().getComboBoxLicense().getSelectedItem()).toUpperCase())
 						|| vista.getPanelVan().getComboBoxLicense().getSelectedItem().toString().equals("ALL"))
 				.collect(Collectors.toList());
 
@@ -459,7 +500,7 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 			if (!carnetTruck.contains(carnet)) {
 				carnetTruck.add(carnet);
-				
+
 			}
 		}
 
@@ -481,7 +522,8 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 				.filter((c) -> c.getMotor().toUpperCase().contains(
 						String.valueOf(vista.getPanelTruck().getComboBoxEngine().getSelectedItem()).toUpperCase())
 						|| vista.getPanelTruck().getComboBoxEngine().getSelectedItem().toString().equals("ALL"))
-				.filter((c) -> String.valueOf(c.getCarnet()).contains(String.valueOf(vista.getPanelTruck().getComboBoxLicense().getSelectedItem()).toUpperCase())
+				.filter((c) -> String.valueOf(c.getCarnet()).contains(
+						String.valueOf(vista.getPanelTruck().getComboBoxLicense().getSelectedItem()).toUpperCase())
 						|| vista.getPanelTruck().getComboBoxLicense().getSelectedItem().toString().equals("ALL"))
 				.collect(Collectors.toList());
 
@@ -549,7 +591,7 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		vista.getPanelTruck().getComboBoxEngine().setModel(ndcmct);
 
 	}
-	
+
 	private void rellenarComboEngineBus() {
 
 		String engine;
@@ -582,7 +624,7 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 			if (!carnetBus.contains(carnet)) {
 				carnetBus.add(carnet);
-				
+
 			}
 		}
 
@@ -604,7 +646,8 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 				.filter((c) -> c.getMotor().toUpperCase().contains(
 						String.valueOf(vista.getPanelMinibus().getComboBoxEngine().getSelectedItem()).toUpperCase())
 						|| vista.getPanelMinibus().getComboBoxEngine().getSelectedItem().toString().equals("ALL"))
-				.filter((c) -> String.valueOf(c.getCarnet()).contains(String.valueOf(vista.getPanelMinibus().getComboBoxLicense().getSelectedItem()).toUpperCase())
+				.filter((c) -> String.valueOf(c.getCarnet()).contains(
+						String.valueOf(vista.getPanelMinibus().getComboBoxLicense().getSelectedItem()).toUpperCase())
 						|| vista.getPanelMinibus().getComboBoxLicense().getSelectedItem().toString().equals("ALL"))
 				.collect(Collectors.toList());
 
@@ -672,7 +715,6 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		vista.getPanelMinibus().getComboBoxEngine().setModel(ndcmcb);
 
 	}
-	
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -681,82 +723,261 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 		if (comando.equals("cambio car")) {
 			cambiarOrdenCar();
-		}else if (comando.equals("cambio van")) {
+		} else if (comando.equals("cambio van")) {
 			cambiarOrdenVan();
-		}else if (comando.equals("cambio truck")) {
+		} else if (comando.equals("cambio truck")) {
 			cambiarOrdenTruck();
-		}else if (comando.equals("cambio bus")) {
+		} else if (comando.equals("cambio bus")) {
 			cambiarOrdenBus();
-		}else if (comando.equals("Delete car")) {
+		} else if (comando.equals("Delete car")) {
 			deleteCar();
-		}else if (comando.equals("Delete van")) {
+		} else if (comando.equals("Delete van")) {
 			deleteVan();
-		}else if (comando.equals("Delete truck")) {
+		} else if (comando.equals("Delete truck")) {
 			deleteTruck();
-		}else if (comando.equals("Delete bus")) {
+		} else if (comando.equals("Delete bus")) {
 			deleteBus();
-		}else if (comando.equals("Add car")) {
+		} else if (comando.equals("Add car")) {
 			vistaAddCar();
-		}else if (comando.equals("Add new car")) {
+		} else if (comando.equals("Add new car")) {
 			addCar();
+		} else if (comando.equals("Cancel")) {
+			closeTable();
+		} else if (comando.equals("Cancel add car")) {
+			closeAddCar();
+		} else if (comando.equals("Edit car")) {
+			vistaEditCar();
+		} else if (comando.equals("save edit car")) {
+			editCar();
+		} else if (comando.equals("Cancel edit car")) {
+			closeEditCar();
+		} else if (comando.equals("Add van")) {
+			vistaAddVan();
+		} else if (comando.equals("Add new van")) {
+			addVan();
+		} else if (comando.equals("Edit van")) {
+			vistaEditVan();
 		}
 
 	}
 
-	private void addCar() {
+	private void vistaEditVan() {
 		
-		String matricula = vistaAddCar.getTxtFieldMatricula().getText();
+		if (vista.getPanelVan().getTable().getSelectedRow() == -1) {
 
-		String marca = vistaAddCar.getTxtFieldMarca().getText();
-		String descripcion = vistaAddCar.getTxtFieldDescripcion().getText();
-		String color = vistaAddCar.getTxtFieldColor().getText();
-		String motor = vistaAddCar.getTxtFieldMotor().getText();
-		
-		String estado = String.valueOf(vistaAddCar.getComboBoxEstado().getSelectedItem());
-		char carnet = String.valueOf(vistaAddCar.getComboBoxCarnet().getSelectedItem()).charAt(0);
+			JOptionPane.showMessageDialog(null, "You must select one row", "ERROR", JOptionPane.ERROR_MESSAGE);
 
+		} else {
+
+			if (!Controlador.isOpen(vistaEditVan)) {
+				vistaEditVan = new vistaEditVan();
+				Controlador.addJInternalFrame(vistaEditVan);
+				Controlador.centrar(vistaEditVan);
+			}
+
+			String engine;
+
+			engineVan = new ArrayList<String>();
+
+			for (Van v : furgonetas) {
+				engine = v.getMotor();
+				if (!engineVan.contains(engine)) {
+					engineVan.add(engine);
+				}
+			}
+//
+//			dcmec = new DefaultComboBoxModel();
+//			dcmec.addAll(engineCar);
+//			vistaEditVan.getComboBoxMotor().setModel(dcmec);
+//
+//			vistaEditVan.getBtnAdd().addActionListener(this);
+//			vistaEditVan.getBtnCancel().addActionListener(this);
+//			vistaEditVan.getBtnAdd().setActionCommand("save edit car");
+//			vistaEditVan.getBtnCancel().setActionCommand("Cancel edit car");
+//
+//			String[] carnetss = new String[] { "B" };
+//
+//			Vector<String> carnets = new Vector<String>();
+//			for (String c : carnetss) {
+//				carnets.add(c);
+//			}
+//
+//			DefaultComboBoxModel dcbCarnets = new DefaultComboBoxModel();
+//			dcbCarnets.addAll(carnets);
+//			dcbCarnets.setSelectedItem("B");
+//			vistaEditVan.getComboBoxCarnet().setModel(dcbCarnets);
+//
+//			String[] estadoo = new String[] { "preparado", "taller", "baja", "alquilado", "reservado" };
+//
+//			Vector<String> estado = new Vector<String>();
+//			for (String c : estadoo) {
+//				estado.add(c);
+//			}
+//
+//			dcbEstadoAdd = new DefaultComboBoxModel();
+//			dcbEstadoAdd.addAll(estado);
+//
+//			int[] rows = new int[vista.getPanelCar().getTable().getRowCount()];
+//			rows = vista.getPanelCar().getTable().getSelectedRows();
+//			ArrayList<Car> carEdit = new ArrayList<Car>();
+//
+//			carEdit = ((MyTableModel) vista.getPanelCar().getTable().getModel()).get(rows);
+//
+//			Car c = carEdit.get(0);
+//
+//			vistaEditVan.getTxtFieldMarca().setText(c.getMarca());
+//			if (c.getCilindrada() == 0.0) {
+//				vistaEditVan.getTxtFieldCilindrada().setText("");
+//			} else {
+//				vistaEditVan.getTxtFieldCilindrada().setText(String.valueOf(c.getCilindrada()));
+//			}
+//			vistaEditVan.getTxtFieldColor().setText(c.getColor());
+//			vistaEditVan.getTxtFieldDate().setDate(c.getFechaadq());
+//			vistaEditVan.getTxtFieldDescripcion().setText(c.getDescripcion());
+//			vistaEditVan.getTxtFieldMatricula().setText(c.getMatricula());
+//			vistaEditVan.getTxtFielMMA().setText(String.valueOf(c.getNumPlazas()));
+//			vistaEditVan.getTxtFieldPrecio().setText(String.valueOf(c.getPrecioDia()));
+//			dcbEstadoAdd.setSelectedItem(c.getEstado());
+//			vistaEditVan.getComboBoxEstado().setModel(dcbEstadoAdd);
+//			vistaEditVan.getComboBoxMotor().setSelectedItem(c.getMotor());
+//
+//		}
 		
-		if (vistaAddCar.getTxtFieldDate().getDate() == null | matricula.equals("") | vistaAddCar.getTxtFieldPrecio().getText() == null
-				| marca.equals("") | vistaAddCar.getTxtFieldCilindrada().getText() == null | color.equals("") | motor.equals("") | estado.equals("")
-				| carnet == ' ' | vistaAddCar.getTxtFieldNumPlazas().getText() == null
-				| vistaAddCar.getTxtFieldNumPuertas().getText() == null) {
+	}
+
+	private void addVan() {
+		
+		String matricula = vistaAddVan.getTxtFieldMatricula().getText();
+
+		String marca = vistaAddVan.getTxtFieldMarca().getText();
+		String descripcion;
+		String color = vistaAddVan.getTxtFieldColor().getText();
+		String motor = String.valueOf(vistaAddVan.getComboBoxMotor().getSelectedItem());
+
+		String estado = String.valueOf(vistaAddVan.getComboBoxEstado().getSelectedItem());
+		char carnet = String.valueOf(vistaAddVan.getComboBoxCarnet().getSelectedItem()).charAt(0);
+
+
+		if (vistaAddVan.getTxtFieldDate().getDate() == null | matricula.equals("")
+				| vistaAddVan.getTxtFieldPrecio().getText() == null | marca.equals("")
+				| vistaAddVan.getTxtFieldCilindrada().getText() == null | color.equals("") | motor.equals("")
+				| estado.equals("") | carnet == ' ' |  vistaAddVan.getTxtFielMMA().getText() == null) {
 
 			JOptionPane.showMessageDialog(null, "You must fill in all the required fields (*)", "ERROR",
 					JOptionPane.ERROR_MESSAGE);
 
 		} else {
-			
-			java.sql.Date fechaNac = new java.sql.Date(vistaAddCar.getTxtFieldDate().getDate().getTime());
-			Double precioDia = Double.parseDouble(vistaAddCar.getTxtFieldPrecio().getText());
-//			Double cilindrada = Double.parseDouble(vistaAddCar.getTxtFieldCilindrada().getText());
-			int numPlazas = Integer.parseInt(vistaAddCar.getTxtFieldNumPlazas().getText());
-			int numPuertas = Integer.parseInt(vistaAddCar.getTxtFieldNumPuertas().getText());
-			System.out.println("si");
-			if(vistaAddCar.getTxtFieldCilindrada().getText().equals("")) {
-				System.out.println("si");
-				Car c = new Car(matricula,precioDia,marca,color,motor,fechaNac,estado,carnet,numPlazas,numPuertas);
-				modelo.addCar(c);
-				System.out.println(c);
-			}
-			
-			
-//			Car c = new Car(matricula,precioDia,marca,descripcion,color,motor,cilindrada,fechaNac,estado,carnet,numPlazas,numPuertas);
-			
-		}
 
+			java.sql.Date fechaNac = new java.sql.Date(vistaAddVan.getTxtFieldDate().getDate().getTime());
+			Double precioDia = Double.parseDouble(vistaAddVan.getTxtFieldPrecio().getText());
+			Double cilindrada;
+			Double mma = Double.valueOf(vistaAddVan.getTxtFielMMA().getText());
+
+			if (vistaAddVan.getTxtFieldCilindrada().getText().equals("")
+					&& vistaAddVan.getTxtFieldDescripcion().getText().equals("")) {
+
+				if (vistaAddVan.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaAddVan.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaAddVan.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaAddVan.getTxtFieldDescripcion().getText();
+				}
+
+				Van v = new Van(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado, carnet, mma);
+				
+				try {
+					if (modelo.addVan(v)) {
+						JOptionPane.showMessageDialog(null, "Van created correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaAddVan.dispose();
+						recargarTablaVan();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			} else {
+				if (vistaAddVan.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaAddVan.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaAddVan.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaAddVan.getTxtFieldDescripcion().getText();
+				}
+
+				Van v = new Van(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado, carnet, mma);
+				try {
+					if (modelo.addVan(v)) {
+						JOptionPane.showMessageDialog(null, "Van created correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaAddVan.dispose();
+						recargarTablaVan();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+
+		}
+		
 	}
 
-	private void vistaAddCar() {
+	private void recargarTablaVan() {
 		
-		if (!Controlador.isOpen(vistaAddCar)) {
+		if (!Controlador.isOpen(vistaCarga)) {
+			vistaCarga = new vistaCarga("Updating the data from the database");
+			Controlador.addJInternalFrame(vistaCarga);
+			Controlador.centrar(vistaCarga);
 
-			vistaAddCar = new vistaAddCar();
-			Controlador.addJInternalFrame(vistaAddCar);
-			Controlador.centrar(vistaAddCar);
+			vistaCarga.getBtnCancel().addActionListener(this);
+			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+		}
+
+		task6 = new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+
+				furgonetas = modelo.getFurgonetas();
+				rellenarTablaVan();
+
+				return null;
+
+			}
+
+			@Override
+			protected void done() {
+
+				vistaCarga.dispose();
+
+			}
+		};
+
+		task6.execute();
+		
+	}
+
+	private void vistaAddVan() {
+		
+		if (!Controlador.isOpen(vistaAddVan)) {
+
+			vistaAddVan = new vistaAddVan();
+			Controlador.addJInternalFrame(vistaAddVan);
+			Controlador.centrar(vistaAddVan);
 
 		}
 
-		String[] carnetss = new String[] { "A", "B", "C", "D", "E", "Z" };
+		String[] carnetss = new String[] { "C" };
 
 		Vector<String> carnets = new Vector<String>();
 		for (String c : carnetss) {
@@ -765,10 +986,10 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 		dcbCarnetsAdd = new DefaultComboBoxModel();
 		dcbCarnetsAdd.addAll(carnets);
-		dcbCarnetsAdd.setSelectedItem("A");
-		vistaAddCar.getComboBoxCarnet().setModel(dcbCarnetsAdd);
-		
-		String[] estadoo = new String[] { "PREPARADO", "TALLER", "BAJA", "ALQUILADO", "RESERVADO"};
+		dcbCarnetsAdd.setSelectedItem("C");
+		vistaAddVan.getComboBoxCarnet().setModel(dcbCarnetsAdd);
+
+		String[] estadoo = new String[] { "preparado", "taller", "baja", "alquilado", "reservado" };
 
 		Vector<String> estado = new Vector<String>();
 		for (String c : estadoo) {
@@ -777,20 +998,384 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 
 		dcbEstadoAdd = new DefaultComboBoxModel();
 		dcbEstadoAdd.addAll(estado);
-		dcbEstadoAdd.setSelectedItem("PREPARADO");
-		vistaAddCar.getComboBoxEstado().setModel(dcbEstadoAdd);
+		dcbEstadoAdd.setSelectedItem("preparado");
+		vistaAddVan.getComboBoxEstado().setModel(dcbEstadoAdd);
 
+		String engine;
 
-		vistaAddCar.getBtnAdd().addActionListener(this);
-		vistaAddCar.getBtnCancel().addActionListener(this);
-		vistaAddCar.getBtnAdd().setActionCommand("Add new car");
-		vistaAddCar.getBtnCancel().setActionCommand("Cancel add");
+		engineVan = new ArrayList<String>();
+
+		for (Van v : furgonetas) {
+			engine = v.getMotor();
+			if (!engineVan.contains(engine)) {
+				engineVan.add(engine);
+			}
+		}
+
+		dcmec = new DefaultComboBoxModel();
+		dcmec.addAll(engineVan);
+		dcmec.setSelectedItem("gasolina");
+		vistaAddVan.getComboBoxMotor().setModel(dcmec);
+
+		vistaAddVan.getBtnAdd().addActionListener(this);
+		vistaAddVan.getBtnCancel().addActionListener(this);
+		vistaAddVan.getBtnAdd().setActionCommand("Add new van");
+		vistaAddVan.getBtnCancel().setActionCommand("Cancel add van");
 
 		
 	}
 
-	private void deleteBus() {
+	private void closeEditCar() {
 		
+		int opcion = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel Edit?", "Warning!",
+				JOptionPane.YES_NO_OPTION);
+		if (opcion == 0) {
+			vistaEditCar.dispose();
+		}
+
+		
+	}
+
+	private void editCar() {
+		
+		String matricula = vistaEditCar.getTxtFieldMatricula().getText();
+
+		String marca = vistaEditCar.getTxtFieldMarca().getText();
+		String descripcion;
+		String color = vistaEditCar.getTxtFieldColor().getText();
+		String motor = String.valueOf(vistaEditCar.getComboBoxMotor().getSelectedItem());
+
+		String estado = String.valueOf(vistaEditCar.getComboBoxEstado().getSelectedItem());
+		char carnet = String.valueOf(vistaEditCar.getComboBoxCarnet().getSelectedItem()).charAt(0);
+
+		if (vistaEditCar.getTxtFieldDate().getDate() == null | matricula.equals("")
+				| vistaEditCar.getTxtFieldPrecio().getText() == null | marca.equals("")
+				| vistaEditCar.getTxtFieldCilindrada().getText() == null | color.equals("") | motor.equals("")
+				| estado.equals("") | carnet == ' ' | vistaEditCar.getTxtFieldNumPlazas().getText() == null
+				| vistaEditCar.getTxtFieldNumPuertas().getText() == null) {
+
+			JOptionPane.showMessageDialog(null, "You must fill in all the required fields (*)", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+
+		} else {
+
+			java.sql.Date fechaNac = new java.sql.Date(vistaEditCar.getTxtFieldDate().getDate().getTime());
+			Double precioDia = Double.parseDouble(vistaEditCar.getTxtFieldPrecio().getText());
+			Double cilindrada;
+			int numPlazas = Integer.parseInt(vistaEditCar.getTxtFieldNumPlazas().getText());
+			int numPuertas = Integer.parseInt(vistaEditCar.getTxtFieldNumPuertas().getText());
+			if (vistaEditCar.getTxtFieldCilindrada().getText().equals("")
+					&& vistaEditCar.getTxtFieldDescripcion().getText().equals("")) {
+
+				if (vistaEditCar.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaEditCar.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaEditCar.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaEditCar.getTxtFieldDescripcion().getText();
+				}
+
+				Car c = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado,
+						carnet, numPlazas, numPuertas);
+				try {
+					if (modelo.editCar(c)) {
+						JOptionPane.showMessageDialog(null, "Car updated correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaEditCar.dispose();
+						recargarTablaCar();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			} else {
+				if (vistaEditCar.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaEditCar.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaEditCar.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaEditCar.getTxtFieldDescripcion().getText();
+				}
+
+				Car c = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado,
+						carnet, numPlazas, numPuertas);
+				try {
+					if (modelo.editCar(c)) {
+						JOptionPane.showMessageDialog(null, "Car updated correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaEditCar.dispose();
+						recargarTablaCar();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+
+		}
+
+		
+	}
+
+	private void closeAddCar() {
+
+		int opcion = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel Add?", "Warning!",
+				JOptionPane.YES_NO_OPTION);
+		if (opcion == 0) {
+			vistaAddCar.dispose();
+		}
+
+	}
+
+	private void closeTable() {
+
+		int opcion = JOptionPane.showConfirmDialog(null, "Are you sure you want to close the window?", "Warning!",
+				JOptionPane.YES_NO_OPTION);
+		if (opcion == 0) {
+			vista.dispose();
+		}
+
+	}
+
+	private void addCar() {
+
+		String matricula = vistaAddCar.getTxtFieldMatricula().getText();
+
+		String marca = vistaAddCar.getTxtFieldMarca().getText();
+		String descripcion;
+		String color = vistaAddCar.getTxtFieldColor().getText();
+		String motor = String.valueOf(vistaAddCar.getComboBoxMotor().getSelectedItem());
+
+		String estado = String.valueOf(vistaAddCar.getComboBoxEstado().getSelectedItem());
+		char carnet = String.valueOf(vistaAddCar.getComboBoxCarnet().getSelectedItem()).charAt(0);
+
+		if (vistaAddCar.getTxtFieldDate().getDate() == null | matricula.equals("")
+				| vistaAddCar.getTxtFieldPrecio().getText() == null | marca.equals("")
+				| vistaAddCar.getTxtFieldCilindrada().getText() == null | color.equals("") | motor.equals("")
+				| estado.equals("") | carnet == ' ' | vistaAddCar.getTxtFieldNumPlazas().getText() == null
+				| vistaAddCar.getTxtFieldNumPuertas().getText() == null) {
+
+			JOptionPane.showMessageDialog(null, "You must fill in all the required fields (*)", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+
+		} else {
+
+			java.sql.Date fechaNac = new java.sql.Date(vistaAddCar.getTxtFieldDate().getDate().getTime());
+			Double precioDia = Double.parseDouble(vistaAddCar.getTxtFieldPrecio().getText());
+			Double cilindrada;
+			int numPlazas = Integer.parseInt(vistaAddCar.getTxtFieldNumPlazas().getText());
+			int numPuertas = Integer.parseInt(vistaAddCar.getTxtFieldNumPuertas().getText());
+			if (vistaAddCar.getTxtFieldCilindrada().getText().equals("")
+					&& vistaAddCar.getTxtFieldDescripcion().getText().equals("")) {
+
+				if (vistaAddCar.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaAddCar.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaAddCar.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaAddCar.getTxtFieldDescripcion().getText();
+				}
+
+				Car c = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado,
+						carnet, numPlazas, numPuertas);
+				try {
+					if (modelo.addCar(c)) {
+						JOptionPane.showMessageDialog(null, "Car created correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaAddCar.dispose();
+						recargarTablaCar();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			} else {
+				if (vistaAddCar.getTxtFieldCilindrada().getText().equals("")) {
+					cilindrada = null;
+				} else {
+					cilindrada = Double.parseDouble(vistaAddCar.getTxtFieldCilindrada().getText());
+				}
+
+				if (vistaAddCar.getTxtFieldDescripcion().getText().equals("")) {
+					descripcion = null;
+				} else {
+					descripcion = vistaAddCar.getTxtFieldDescripcion().getText();
+				}
+
+				Car c = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaNac, estado,
+						carnet, numPlazas, numPuertas);
+				try {
+					if (modelo.addCar(c)) {
+						JOptionPane.showMessageDialog(null, "Car created correctly", "CORRECTLY",
+								JOptionPane.INFORMATION_MESSAGE);
+						vistaAddCar.dispose();
+						recargarTablaCar();
+					}
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+
+		}
+
+	}
+
+	private void vistaEditCar() {
+
+		if (vista.getPanelCar().getTable().getSelectedRow() == -1) {
+
+			JOptionPane.showMessageDialog(null, "You must select one row", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+		} else {
+
+			if (!Controlador.isOpen(vistaEditCar)) {
+				vistaEditCar = new vistaEditCar();
+				Controlador.addJInternalFrame(vistaEditCar);
+				Controlador.centrar(vistaEditCar);
+			}
+
+			String engine;
+
+			engineCar = new ArrayList<String>();
+
+			for (Car c : coches) {
+				engine = c.getMotor();
+				if (!engineCar.contains(engine)) {
+					engineCar.add(engine);
+				}
+			}
+
+			dcmec = new DefaultComboBoxModel();
+			dcmec.addAll(engineCar);
+			vistaEditCar.getComboBoxMotor().setModel(dcmec);
+
+			vistaEditCar.getBtnAdd().addActionListener(this);
+			vistaEditCar.getBtnCancel().addActionListener(this);
+			vistaEditCar.getBtnAdd().setActionCommand("save edit car");
+			vistaEditCar.getBtnCancel().setActionCommand("Cancel edit car");
+
+			String[] carnetss = new String[] { "B" };
+
+			Vector<String> carnets = new Vector<String>();
+			for (String c : carnetss) {
+				carnets.add(c);
+			}
+
+			DefaultComboBoxModel dcbCarnets = new DefaultComboBoxModel();
+			dcbCarnets.addAll(carnets);
+			dcbCarnets.setSelectedItem("B");
+			vistaEditCar.getComboBoxCarnet().setModel(dcbCarnets);
+
+			String[] estadoo = new String[] { "preparado", "taller", "baja", "alquilado", "reservado" };
+
+			Vector<String> estado = new Vector<String>();
+			for (String c : estadoo) {
+				estado.add(c);
+			}
+
+			dcbEstadoAdd = new DefaultComboBoxModel();
+			dcbEstadoAdd.addAll(estado);
+
+			int[] rows = new int[vista.getPanelCar().getTable().getRowCount()];
+			rows = vista.getPanelCar().getTable().getSelectedRows();
+			ArrayList<Car> carEdit = new ArrayList<Car>();
+
+			carEdit = ((MyTableModel) vista.getPanelCar().getTable().getModel()).get(rows);
+
+			Car c = carEdit.get(0);
+
+			vistaEditCar.getTxtFieldMarca().setText(c.getMarca());
+			if (c.getCilindrada() == 0.0) {
+				vistaEditCar.getTxtFieldCilindrada().setText("");
+			} else {
+				vistaEditCar.getTxtFieldCilindrada().setText(String.valueOf(c.getCilindrada()));
+			}
+			vistaEditCar.getTxtFieldColor().setText(c.getColor());
+			vistaEditCar.getTxtFieldDate().setDate(c.getFechaadq());
+			vistaEditCar.getTxtFieldDescripcion().setText(c.getDescripcion());
+			vistaEditCar.getTxtFieldMatricula().setText(c.getMatricula());
+			vistaEditCar.getTxtFieldNumPlazas().setText(String.valueOf(c.getNumPlazas()));
+			vistaEditCar.getTxtFieldNumPuertas().setText(String.valueOf(c.getNumPuertas()));
+			vistaEditCar.getTxtFieldPrecio().setText(String.valueOf(c.getPrecioDia()));
+			dcbEstadoAdd.setSelectedItem(c.getEstado());
+			vistaEditCar.getComboBoxEstado().setModel(dcbEstadoAdd);
+			vistaEditCar.getComboBoxMotor().setSelectedItem(c.getMotor());
+
+		}
+	}
+
+	private void vistaAddCar() {
+
+		if (!Controlador.isOpen(vistaAddCar)) {
+
+			vistaAddCar = new vistaAddCar();
+			Controlador.addJInternalFrame(vistaAddCar);
+			Controlador.centrar(vistaAddCar);
+
+		}
+
+		String[] carnetss = new String[] { "B" };
+
+		Vector<String> carnets = new Vector<String>();
+		for (String c : carnetss) {
+			carnets.add(c);
+		}
+
+		dcbCarnetsAdd = new DefaultComboBoxModel();
+		dcbCarnetsAdd.addAll(carnets);
+		dcbCarnetsAdd.setSelectedItem("B");
+		vistaAddCar.getComboBoxCarnet().setModel(dcbCarnetsAdd);
+
+		String[] estadoo = new String[] { "preparado", "taller", "baja", "alquilado", "reservado" };
+
+		Vector<String> estado = new Vector<String>();
+		for (String c : estadoo) {
+			estado.add(c);
+		}
+
+		dcbEstadoAdd = new DefaultComboBoxModel();
+		dcbEstadoAdd.addAll(estado);
+		dcbEstadoAdd.setSelectedItem("preparado");
+		vistaAddCar.getComboBoxEstado().setModel(dcbEstadoAdd);
+
+		String engine;
+
+		engineCar = new ArrayList<String>();
+
+		for (Car c : coches) {
+			engine = c.getMotor();
+			if (!engineCar.contains(engine)) {
+				engineCar.add(engine);
+			}
+		}
+
+		dcmec = new DefaultComboBoxModel();
+		dcmec.addAll(engineCar);
+		dcmec.setSelectedItem("gasolina");
+		vistaAddCar.getComboBoxMotor().setModel(dcmec);
+
+		vistaAddCar.getBtnAdd().addActionListener(this);
+		vistaAddCar.getBtnCancel().addActionListener(this);
+		vistaAddCar.getBtnAdd().setActionCommand("Add new car");
+		vistaAddCar.getBtnCancel().setActionCommand("Cancel add car");
+
+	}
+
+	private void deleteBus() {
+
 		if (vista.getPanelMinibus().getTable().getSelectedRow() == -1) {
 
 			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -839,11 +1424,11 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 			task4.execute();
 
 		}
-		
+
 	}
 
 	private void deleteTruck() {
-		
+
 		if (vista.getPanelTruck().getTable().getSelectedRow() == -1) {
 
 			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -892,11 +1477,11 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 			task3.execute();
 
 		}
-		
+
 	}
 
 	private void deleteVan() {
-		
+
 		if (vista.getPanelVan().getTable().getSelectedRow() == -1) {
 
 			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -945,12 +1530,11 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 			task2.execute();
 
 		}
-		
-		
+
 	}
 
 	private void deleteCar() {
-		
+
 		if (vista.getPanelCar().getTable().getSelectedRow() == -1) {
 
 			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -999,7 +1583,42 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 			task.execute();
 
 		}
-		
+
+	}
+
+	private void recargarTablaCar() {
+
+		if (!Controlador.isOpen(vistaCarga)) {
+			vistaCarga = new vistaCarga("Updating the data from the database");
+			Controlador.addJInternalFrame(vistaCarga);
+			Controlador.centrar(vistaCarga);
+
+			vistaCarga.getBtnCancel().addActionListener(this);
+			vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+		}
+
+		task5 = new SwingWorker<Void, Void>() {
+
+			@Override
+			protected Void doInBackground() throws Exception {
+
+				coches = modelo.getCoches();
+				rellenarTablaCar();
+
+				return null;
+
+			}
+
+			@Override
+			protected void done() {
+
+				vistaCarga.dispose();
+
+			}
+		};
+
+		task5.execute();
+
 	}
 
 	@Override
@@ -1008,13 +1627,13 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		if (arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldRegistration()) {
 			cambiarOrdenCar();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldRegistration()) {
 			cambiarOrdenVan();
-		}else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldRegistration()) {
 			cambiarOrdenTruck();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("opwner") == vista.getPanelMinibus().getTxtFieldRegistration()) {
 			cambiarOrdenBus();
 		}
@@ -1027,13 +1646,13 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		if (arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldRegistration()) {
 			cambiarOrdenCar();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldRegistration()) {
 			cambiarOrdenVan();
-		}else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldRegistration()) {
 			cambiarOrdenTruck();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("opwner") == vista.getPanelMinibus().getTxtFieldRegistration()) {
 			cambiarOrdenBus();
 		}
@@ -1045,13 +1664,13 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 		if (arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelCar().getTxtFieldRegistration()) {
 			cambiarOrdenCar();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelVan().getTxtFieldRegistration()) {
 			cambiarOrdenVan();
-		}else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("owner") == vista.getPanelTruck().getTxtFieldRegistration()) {
 			cambiarOrdenTruck();
-		}else if(arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
+		} else if (arg0.getDocument().getProperty("owner") == vista.getPanelMinibus().getTxtFieldModel()
 				|| arg0.getDocument().getProperty("opwner") == vista.getPanelMinibus().getTxtFieldRegistration()) {
 			cambiarOrdenBus();
 		}

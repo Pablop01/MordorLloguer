@@ -17,7 +17,7 @@ import com.alee.extended.date.WebDateField;
 
 import javax.swing.ImageIcon;
 
-public class vistaAddCar extends JInternalFrame {
+public class vistaEditCar extends JInternalFrame {
 	private JTextField txtFieldCilindrada;
 	private WebDateField txtFieldDate;
 	private JTextField txtFieldNumPlazas;
@@ -36,8 +36,8 @@ public class vistaAddCar extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public vistaAddCar() {
-		setFrameIcon(new ImageIcon(vistaAddCar.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
+	public vistaEditCar() {
+		setFrameIcon(new ImageIcon(vistaEditCar.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		setClosable(true);
 		setBounds(100, 100, 656, 325);
 		getContentPane().setLayout(new MigLayout("", "[90.00,left][grow][][][left][grow]", "[][][][][][][][][][][][grow]"));
@@ -125,7 +125,7 @@ public class vistaAddCar extends JInternalFrame {
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, "cell 0 11 6 1,grow");
 		
-		btnAdd = new JButton("Add");
+		btnAdd = new JButton("Edit");
 		
 		btnCancel = new JButton("Cancel");
 		GroupLayout gl_panel = new GroupLayout(panel);

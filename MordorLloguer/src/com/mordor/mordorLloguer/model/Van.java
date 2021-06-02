@@ -8,7 +8,7 @@ public class Van extends Vehicle{
 	private double mma;
 	
 	public Van(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet, double mma ) {
+			Double cilindrada, Date fechaadq, String estado, char carnet, double mma ) {
 		super(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		
 		this.mma = mma;

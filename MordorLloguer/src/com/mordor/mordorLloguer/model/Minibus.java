@@ -10,7 +10,7 @@ public class Minibus extends Vehicle{
 	
 	
 	public Minibus(String matricula, double precioDia, String marca, String descripcion, String color, String motor,
-			double cilindrada, Date fechaadq, String estado, char carnet, int numPlazas, double medida) {
+			Double cilindrada, Date fechaadq, String estado, char carnet, int numPlazas, double medida) {
 		super(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet);
 		this.matricula = super.getMatricula();
 		this.numPlazas = numPlazas;

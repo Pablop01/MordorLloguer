@@ -664,7 +664,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 	}
 
 	@Override
-	public boolean addCar(Car car) {
+	public boolean addCar(Car car) throws SQLException {
 		
 		boolean eliminado = false;
 
@@ -682,7 +682,11 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(4, car.getDescripcion());
 			pstmt.setString(5, car.getColor());
 			pstmt.setString(6, car.getMotor());
-			pstmt.setDouble(7, car.getCilindrada());
+			if(car.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, car.getCilindrada());
+			}
 			pstmt.setDate(8, car.getFechaadq());
 			pstmt.setString(9, car.getEstado());
 			pstmt.setString(10, String.valueOf(car.getCarnet()));
@@ -693,7 +697,294 @@ public class OracleDataBase implements AlmacenDatosDB {
 				eliminado = true;
 			}
 
-		} catch (SQLException e) {
+		} 
+
+		return eliminado;
+		
+	}
+
+	
+
+	@Override
+	public boolean addVan(Van van) throws SQLException {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.insertarFurgoneta(?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, van.getMatricula());
+			pstmt.setDouble(2, van.getPrecioDia());
+			pstmt.setString(3, van.getMarca());
+			pstmt.setString(4, van.getDescripcion());
+			pstmt.setString(5, van.getColor());
+			pstmt.setString(6, van.getMotor());
+			if(van.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, van.getCilindrada());
+			}
+			pstmt.setDate(8, van.getFechaadq());
+			pstmt.setString(9, van.getEstado());
+			pstmt.setString(10, String.valueOf(van.getCarnet()));
+			pstmt.setDouble(11, van.getMma());
+
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} 
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean addTruck(Truck truck) throws SQLException {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.insertarCamion(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, truck.getMatricula());
+			pstmt.setDouble(2, truck.getPrecioDia());
+			pstmt.setString(3, truck.getMarca());
+			pstmt.setString(4, truck.getDescripcion());
+			pstmt.setString(5, truck.getColor());
+			pstmt.setString(6, truck.getMotor());
+			if(truck.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, truck.getCilindrada());
+			}
+			pstmt.setDate(8, truck.getFechaadq());
+			pstmt.setString(9, truck.getEstado());
+			pstmt.setString(10, String.valueOf(truck.getCarnet()));
+			pstmt.setInt(11, truck.getNumRuedas());
+			pstmt.setInt(12, truck.getMma());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} 
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean addBus(Minibus bus) throws SQLException {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.insertarMicroBus(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, bus.getMatricula());
+			pstmt.setDouble(2, bus.getPrecioDia());
+			pstmt.setString(3, bus.getMarca());
+			pstmt.setString(4, bus.getDescripcion());
+			pstmt.setString(5, bus.getColor());
+			pstmt.setString(6, bus.getMotor());
+			if(bus.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, bus.getCilindrada());
+			}
+			pstmt.setDate(8, bus.getFechaadq());
+			pstmt.setString(9, bus.getEstado());
+			pstmt.setString(10, String.valueOf(bus.getCarnet()));
+			pstmt.setInt(11, bus.getNumPlazas());
+			pstmt.setDouble(12, bus.getMedida());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} 
+
+		return eliminado;
+		
+	}
+	
+	@Override
+	public boolean editCar(Car car) {
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.actualizarCoche(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, car.getMatricula());
+			pstmt.setDouble(2, car.getPrecioDia());
+			pstmt.setString(3, car.getMarca());
+			pstmt.setString(4, car.getDescripcion());
+			pstmt.setString(5, car.getColor());
+			pstmt.setString(6, car.getMotor());
+			if(car.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, car.getCilindrada());
+			}
+			pstmt.setDate(8, car.getFechaadq());
+			pstmt.setString(9, car.getEstado());
+			pstmt.setString(10, String.valueOf(car.getCarnet()));
+			pstmt.setInt(11, car.getNumPlazas());
+			pstmt.setInt(12, car.getNumPuertas());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean editVan(Van van) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.actualizarFurgoneta(?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, van.getMatricula());
+			pstmt.setDouble(2, van.getPrecioDia());
+			pstmt.setString(3, van.getMarca());
+			pstmt.setString(4, van.getDescripcion());
+			pstmt.setString(5, van.getColor());
+			pstmt.setString(6, van.getMotor());
+			if(van.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, van.getCilindrada());
+			}
+			pstmt.setDate(8, van.getFechaadq());
+			pstmt.setString(9, van.getEstado());
+			pstmt.setString(10, String.valueOf(van.getCarnet()));
+			pstmt.setDouble(11, van.getMma());
+
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+
+	}
+
+	@Override
+	public boolean editTruck(Truck truck) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.actualizarCamion(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, truck.getMatricula());
+			pstmt.setDouble(2, truck.getPrecioDia());
+			pstmt.setString(3, truck.getMarca());
+			pstmt.setString(4, truck.getDescripcion());
+			pstmt.setString(5, truck.getColor());
+			pstmt.setString(6, truck.getMotor());
+			if(truck.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, truck.getCilindrada());
+			}
+			pstmt.setDate(8, truck.getFechaadq());
+			pstmt.setString(9, truck.getEstado());
+			pstmt.setString(10, String.valueOf(truck.getCarnet()));
+			pstmt.setInt(11, truck.getNumRuedas());
+			pstmt.setInt(12, truck.getMma());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+		
+	}
+
+	@Override
+	public boolean editBus(Minibus bus) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONVEHICULOS.actualizarMicroBus(?,?,?,?,?,?,?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+			
+			pstmt.setString(1, bus.getMatricula());
+			pstmt.setDouble(2, bus.getPrecioDia());
+			pstmt.setString(3, bus.getMarca());
+			pstmt.setString(4, bus.getDescripcion());
+			pstmt.setString(5, bus.getColor());
+			pstmt.setString(6, bus.getMotor());
+			if(bus.getCilindrada() == null) {
+				pstmt.setNull(7, OracleTypes.NULL);
+			}else {
+				pstmt.setDouble(7, bus.getCilindrada());
+			}
+			pstmt.setDate(8, bus.getFechaadq());
+			pstmt.setString(9, bus.getEstado());
+			pstmt.setString(10, String.valueOf(bus.getCarnet()));
+			pstmt.setInt(11, bus.getNumPlazas());
+			pstmt.setDouble(12, bus.getMedida());
+	
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
