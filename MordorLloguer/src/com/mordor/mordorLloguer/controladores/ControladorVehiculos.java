@@ -785,6 +785,8 @@ public class ControladorVehiculos implements ActionListener, DocumentListener {
 					engineVan.add(engine);
 				}
 			}
+// cuando descomente tengo que borrar esta llave
+		}
 //
 //			dcmec = new DefaultComboBoxModel();
 //			dcmec.addAll(engineCar);
