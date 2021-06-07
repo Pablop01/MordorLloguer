@@ -36,6 +36,7 @@ public class vistaPrincipal extends JFrame {
 	private JButton btnVehiculos;
 	private JLabel lblBienvenido;
 	private JLabel lblNombre;
+	private JButton btnInvoice;
 	
 	/**
 	 * Create the frame.
@@ -91,6 +92,10 @@ public class vistaPrincipal extends JFrame {
 		btnVehiculos.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		toolBar.add(btnVehiculos);
 		
+		btnInvoice = new JButton("");
+		btnInvoice.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/invoice.png")));
+		toolBar.add(btnInvoice);
+		
 		lblBienvenido = new JLabel("");
 		toolBar.add(lblBienvenido);
 		
@@ -140,6 +145,10 @@ public class vistaPrincipal extends JFrame {
 
 	public JLabel getLblNombre() {
 		return lblNombre;
+	}
+
+	public JButton getBtnInvoice() {
+		return btnInvoice;
 	}
 	
 }

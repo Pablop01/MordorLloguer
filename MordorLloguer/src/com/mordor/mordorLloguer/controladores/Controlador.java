@@ -36,6 +36,7 @@ import com.mordor.mordorLloguer.vistas.vistaLogin;
 import com.mordor.mordorLloguer.vistas.vistaPrincipal;
 import com.mordor.mordorLloguer.vistas.vistaTabla;
 import com.mordor.mordorLloguer.vistas.vistaPreferencias;
+import com.mordor.mordorLloguer.vistas.JIFInvoice;
 import com.mordor.mordorLloguer.vistas.vistaCarga;
 import com.mordor.mordorLloguer.vistas.vistaTablaClientes;
 import com.mordor.mordorLloguer.vistas.vistaVehiculos;
@@ -49,6 +50,7 @@ public class Controlador implements ActionListener {
 	private vistaCarga vistaCarga;
 	private vistaTablaClientes vistaTablaClientes;
 	private vistaVehiculos vistaVehiculos = new vistaVehiculos();
+	private JIFInvoice vistaFacturas;
 	private static JDesktopPane desktopPane;
 	private AlmacenDatosDB modelo;
 	private SwingWorker<Boolean, Void> task;
@@ -81,6 +83,7 @@ public class Controlador implements ActionListener {
 		vista.getBtnTabla().addActionListener(this);
 		vista.getBtnClientes().addActionListener(this);
 		vista.getBtnVehiculos().addActionListener(this);
+		vista.getBtnInvoice().addActionListener(this);
 
 		// Añadir ActionCommand
 		vista.getBtnlogin().setActionCommand("Abrir login");
@@ -90,6 +93,7 @@ public class Controlador implements ActionListener {
 		vista.getBtnTabla().setActionCommand("Tabla");
 		vista.getBtnClientes().setActionCommand("Tabla cliente");
 		vista.getBtnVehiculos().setActionCommand("Vehiculos");
+		vista.getBtnInvoice().setActionCommand("Factura");
 
 	}
 
@@ -122,8 +126,21 @@ public class Controlador implements ActionListener {
 			cargarTablaClientes();
 		} else if (comando.equals("Vehiculos")) {
 			cargarTablaVehiculos();
+		} else if (comando.equals("Factura")) {
+			vistaFacturas();
 		}
 
+	}
+
+	private void vistaFacturas() {
+		
+		if (!isOpen(vistaFacturas)) {
+
+			vistaFacturas = new JIFInvoice();
+			addJInternalFrame(vistaFacturas);
+			centrar(vistaFacturas);
+		}
+		
 	}
 
 	private void cargarTablaVehiculos() {
@@ -357,6 +374,7 @@ public class Controlador implements ActionListener {
 			vistaPreferencias = new vistaPreferencias();
 			rellenarCampos();
 			addJInternalFrame(vistaPreferencias);
+			centrar(vistaPreferencias);
 		}
 
 		Action action = new AbstractAction() {
@@ -427,7 +445,7 @@ public class Controlador implements ActionListener {
 					vistaLogin.dispose();
 
 					Empleado e = modelo.getEmpleadosPorDNI(vistaLogin.getTextField().getText());
-					vista.getLblBienvenido().setText("Hola, ");
+					vista.getLblBienvenido().setText("Welcome, ");
 					vista.getLblNombre().setText(e.getNombre());
 					cambiarActivacionBotones(true);
 					vistaLogin.getProgressBar().setVisible(false);
