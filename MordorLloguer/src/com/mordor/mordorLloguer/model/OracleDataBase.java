@@ -213,7 +213,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				cliente = new Cliente(rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
+				cliente = new Cliente(rs.getInt("IDCLIENTE"),rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
 						rs.getString("DOMICILIO"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
 						rs.getString("CARNET").charAt(0), rs.getBytes("FOTO"));
 
@@ -989,6 +989,143 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
+		
+	}
+
+	@Override
+	public String obtenerModelo(String matricula) {
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+		String modelo = "";
+		String query = "SELECT MARCA FROM VEHICULO WHERE MATRICULA = ?";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, matricula);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			modelo = rs.getString(1);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return modelo;
+	}
+
+	@Override
+	public ArrayList<Alquiler> getAlquileres() {
+		
+		ArrayList<Alquiler> alquileres = new ArrayList<Alquiler>();
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "SELECT * FROM ALQUILER ";
+
+		try (Connection con = ds.getConnection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(query)) {
+
+			Alquiler alquiler;
+
+			while (rs.next()) {
+
+				alquiler = new Alquiler(rs.getInt("IDALQUILER"), rs.getInt("IDFACTURA"),rs.getString("MATRICULA"), 
+						rs.getDate("FECHAINICIO"), rs.getDate("FECHAFIN"),rs.getDouble("PRECIO"));
+
+				alquileres.add(alquiler);
+
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return alquileres;
+		
+	}
+
+	@Override
+	public ArrayList<Factura> getFacturas() throws ParseException {
+		
+		ArrayList<Factura> facturas = new ArrayList<Factura>();
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{? = call GESTIONALQUILER.listarFacturas()}";
+
+		try (Connection con = ds.getConnection()) {
+
+			SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+			
+			CallableStatement cstmt = con.prepareCall(query);
+			cstmt.registerOutParameter(1, OracleTypes.REF_CURSOR);
+			cstmt.execute();
+
+			ResultSet rs = (ResultSet) cstmt.getObject(1);
+
+			Factura factura;
+			
+			int idFactura;
+			Date fechaFac;
+			Double importeBase;
+			Double importeIva;
+			int clienteId;
+			
+
+			while (rs.next()) {
+
+				
+				idFactura = rs.getInt("IDFACTURA");
+				fechaFac = rs.getDate("FECHA");
+				importeBase = rs.getDouble("IMPORTEBASE");
+				importeIva = rs.getDouble("IMPORTEIVA");
+				clienteId = rs.getInt("CLIENTEID");
+				
+				factura = new Factura(idFactura,fechaFac,importeBase,importeIva,clienteId);
+				facturas.add(factura);
+				
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return facturas;
+		
+	}
+
+	@Override
+	public boolean addAlquiler(Alquiler a, String dni) throws SQLException {
+		
+		boolean eliminado = false;
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{? = call GESTIONALQUILER.insertarAlquiler(?,?,?,?,?,?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			CallableStatement cstmt = con.prepareCall(query);
+			cstmt.setObject(1, OracleTypes.INTEGER);
+			cstmt.setString(2, dni);
+			cstmt.setString(3, a.getMatricula());
+			cstmt.setNull(4, OracleTypes.NULL);
+			cstmt.setNull(5, OracleTypes.NULL);
+			cstmt.setDate(6, a.getFechaInicio());
+			cstmt.setDate(7, a.getFechaFin());
+			
+			if (cstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} 
+
+		return eliminado;
+		
 		
 	}
 

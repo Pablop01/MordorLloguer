@@ -34,5 +34,8 @@ public interface AlmacenDatosDB {
 	boolean editVan(Van van);
 	boolean editTruck(Truck truck);
 	boolean editBus(Minibus bus);
-	
+	public String obtenerModelo(String matricula);
+	public ArrayList<Factura> getFacturas() throws ParseException;
+	public ArrayList<Alquiler> getAlquileres();
+	boolean addAlquiler(Alquiler a, String dni) throws SQLException;
 }

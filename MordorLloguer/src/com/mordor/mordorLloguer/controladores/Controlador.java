@@ -127,16 +127,22 @@ public class Controlador implements ActionListener {
 		} else if (comando.equals("Vehiculos")) {
 			cargarTablaVehiculos();
 		} else if (comando.equals("Factura")) {
-			vistaFacturas();
+			try {
+				vistaFacturas();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
 
-	private void vistaFacturas() {
+	private void vistaFacturas() throws ParseException {
 		
 		if (!isOpen(vistaFacturas)) {
 
 			vistaFacturas = new JIFInvoice();
+			ControladorFacturas controladorFacturas = new ControladorFacturas(modelo, vistaFacturas);
 			addJInternalFrame(vistaFacturas);
 			centrar(vistaFacturas);
 		}
@@ -469,6 +475,7 @@ public class Controlador implements ActionListener {
 		vista.getBtnTabla().setEnabled(estado);
 		vista.getBtnClientes().setEnabled(estado);
 		vista.getBtnVehiculos().setEnabled(estado);
+		vista.getBtnInvoice().setEnabled(estado);
 
 		if (!estado) {
 			JOptionPane.showMessageDialog(null, "Session closed successfully", "Rigth logout",

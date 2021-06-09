@@ -95,7 +95,7 @@ public class vistaPrincipal extends JFrame {
 		btnInvoice = new JButton("");
 		btnInvoice.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/invoice.png")));
 		toolBar.add(btnInvoice);
-		
+		toolBar.addSeparator(new Dimension(500,0));
 		lblBienvenido = new JLabel("");
 		toolBar.add(lblBienvenido);
 		

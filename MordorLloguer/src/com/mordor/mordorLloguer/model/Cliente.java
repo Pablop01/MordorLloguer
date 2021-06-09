@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 public class Cliente {
 
+	private int id;
 	private String DNI;
 	private String nombre;
 	private String apellidos;
@@ -40,6 +41,21 @@ public class Cliente {
 		this.email = email;
 		this.fechaNac = fechaNac;
 		this.carnet = carnet;
+	}
+
+	public Cliente(int id, String dNI, String nombre, String apellidos, String domicilio, String cP, String email,
+			Date fechaNac, char carnet, byte[] foto) {
+		super();
+		this.id = id;
+		DNI = dNI;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+		this.domicilio = domicilio;
+		CP = cP;
+		this.email = email;
+		this.fechaNac = fechaNac;
+		this.carnet = carnet;
+		this.foto = foto;
 	}
 
 	public String getDNI() {
@@ -78,6 +94,10 @@ public class Cliente {
 		return carnet;
 	}
 
+	public int getId() {
+		return id;
+	}
+	
 	@Override
 	public String toString() {
 		return "Cliente [DNI=" + DNI + ", nombre=" + nombre + ", apellidos=" + apellidos + ", domicilio=" + domicilio

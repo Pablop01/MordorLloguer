@@ -13,7 +13,7 @@ public abstract class MyTableModel<T> extends AbstractTableModel {
 
 	private WebTable table;
 
-	public final List<String> HEADER;
+	public List<String> HEADER;
 
 	List<T> data;
 
