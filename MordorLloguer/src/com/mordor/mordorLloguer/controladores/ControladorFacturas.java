@@ -245,54 +245,61 @@ public class ControladorFacturas implements ActionListener {
 
 	private void removeDetail() {
 		
-		if (vista.getTableDetalles().getSelectedRow() == -1) {
+		int opcion = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete?", "Warning!",
+				JOptionPane.YES_NO_OPTION);
+		if (opcion == 0) {
+			
+			if (vista.getTableDetalles().getSelectedRow() == -1) {
 
-			JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You must select at least one row", "ERROR", JOptionPane.ERROR_MESSAGE);
 
-		} else {
+			} else {
 
-			if (!Controlador.isOpen(vistaCarga)) {
+				if (!Controlador.isOpen(vistaCarga)) {
 
-				vistaCarga = new vistaCarga("Removing from the database");
-				Controlador.addJInternalFrame(vistaCarga);
-				Controlador.centrar(vistaCarga);
+					vistaCarga = new vistaCarga("Removing from the database");
+					Controlador.addJInternalFrame(vistaCarga);
+					Controlador.centrar(vistaCarga);
 
-				vistaCarga.getBtnCancel().addActionListener(this);
-				vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+					vistaCarga.getBtnCancel().addActionListener(this);
+					vistaCarga.getBtnCancel().setActionCommand("Cancelar carga");
+
+				}
+
+				task = new SwingWorker<Boolean, Void>() {
+
+					ArrayList<Alquiler> alquileres;
+
+					@Override
+					protected Boolean doInBackground() throws Exception {
+
+						int[] rows = new int[vista.getTableDetalles().getRowCount()];
+						rows = vista.getTableDetalles().getSelectedRows();
+
+						alquileres = ((MyTableModel) vista.getTableDetalles().getModel()).get(rows);
+
+						for (Alquiler a : alquileres)
+							modelo.deleteDetail(a);
+
+						return true;
+
+					}
+
+					@Override
+					protected void done() {
+
+						for (Alquiler a : alquileres)
+							((MyTableModel) vista.getTableDetalles().getModel()).delete(a);
+						vistaCarga.dispose();
+					}
+				};
+
+				task.execute();
 
 			}
-
-			task = new SwingWorker<Boolean, Void>() {
-
-				ArrayList<Alquiler> alquileres;
-
-				@Override
-				protected Boolean doInBackground() throws Exception {
-
-					int[] rows = new int[vista.getTableDetalles().getRowCount()];
-					rows = vista.getTableDetalles().getSelectedRows();
-
-					alquileres = ((MyTableModel) vista.getTableDetalles().getModel()).get(rows);
-
-					for (Alquiler a : alquileres)
-						modelo.deleteDetail(a);
-
-					return true;
-
-				}
-
-				@Override
-				protected void done() {
-
-					for (Alquiler a : alquileres)
-						((MyTableModel) vista.getTableDetalles().getModel()).delete(a);
-					vistaCarga.dispose();
-				}
-			};
-
-			task.execute();
-
+			
 		}
+		
 		
 	}
 
