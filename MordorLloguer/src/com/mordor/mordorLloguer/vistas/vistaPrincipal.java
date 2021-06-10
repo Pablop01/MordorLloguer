@@ -81,18 +81,22 @@ public class vistaPrincipal extends JFrame {
 		toolBar.addSeparator(new Dimension(10,10));
 		
 		btnTabla = new JButton("");
+		btnTabla.setEnabled(false);
 		btnTabla.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/badge.png")));
 		toolBar.add(btnTabla);
 		
 		btnClientes = new JButton("");
+		btnClientes.setEnabled(false);
 		btnClientes.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/group.png")));
 		toolBar.add(btnClientes);
 		
 		btnVehiculos = new JButton("");
+		btnVehiculos.setEnabled(false);
 		btnVehiculos.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/car.png")));
 		toolBar.add(btnVehiculos);
 		
 		btnInvoice = new JButton("");
+		btnInvoice.setEnabled(false);
 		btnInvoice.setIcon(new ImageIcon(vistaPrincipal.class.getResource("/com/mordor/mordorLloguer/assets/invoice.png")));
 		toolBar.add(btnInvoice);
 		toolBar.addSeparator(new Dimension(500,0));
