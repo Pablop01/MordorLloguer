@@ -38,4 +38,8 @@ public interface AlmacenDatosDB {
 	public ArrayList<Factura> getFacturas() throws ParseException;
 	public ArrayList<Alquiler> getAlquileres();
 	boolean addAlquiler(Alquiler a, String dni) throws SQLException;
+	boolean deleteFactura(Factura f);
+	boolean deleteAlquiler(int idFactura);
+	boolean facturaCobrada(int idFactura);
+	boolean deleteDetail(Alquiler a);
 }

@@ -213,9 +213,9 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				cliente = new Cliente(rs.getInt("IDCLIENTE"),rs.getString("DNI"), rs.getString("NOMBRE"), rs.getString("APELLIDOS"),
-						rs.getString("DOMICILIO"), rs.getString("CP"), rs.getString("EMAIL"), rs.getDate("FECHANAC"),
-						rs.getString("CARNET").charAt(0), rs.getBytes("FOTO"));
+				cliente = new Cliente(rs.getInt("IDCLIENTE"), rs.getString("DNI"), rs.getString("NOMBRE"),
+						rs.getString("APELLIDOS"), rs.getString("DOMICILIO"), rs.getString("CP"), rs.getString("EMAIL"),
+						rs.getDate("FECHANAC"), rs.getString("CARNET").charAt(0), rs.getBytes("FOTO"));
 
 				clientes.add(cliente);
 
@@ -346,7 +346,8 @@ public class OracleDataBase implements AlmacenDatosDB {
 				numPlazas = rs.getInt("N3");
 				numPuertas = rs.getInt("N4");
 
-				car = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet, numPlazas, numPuertas);
+				car = new Car(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado,
+						carnet, numPlazas, numPuertas);
 				coches.add(car);
 
 			}
@@ -412,7 +413,8 @@ public class OracleDataBase implements AlmacenDatosDB {
 				numRuedas = rs.getInt("N3");
 				mma = rs.getInt("N4");
 
-				truck = new Truck(matricula,precioDia,marca,descripcion,color,motor,cilindrada,fechaadq,estado,carnet,numRuedas,mma);
+				truck = new Truck(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado,
+						carnet, numRuedas, mma);
 				camiones.add(truck);
 			}
 
@@ -461,7 +463,6 @@ public class OracleDataBase implements AlmacenDatosDB {
 			char carnet;
 			int mma;
 
-
 			while (rs.next()) {
 
 				matricula = rs.getString("C1");
@@ -476,7 +477,8 @@ public class OracleDataBase implements AlmacenDatosDB {
 				carnet = rs.getString("C8").charAt(0);
 				mma = rs.getInt("N3");
 
-				van = new Van(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet, mma);
+				van = new Van(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado,
+						carnet, mma);
 				furgonetas.add(van);
 
 			}
@@ -543,7 +545,8 @@ public class OracleDataBase implements AlmacenDatosDB {
 				numPlazas = rs.getInt("N3");
 				medida = rs.getInt("N4");
 
-				minibus = new Minibus(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq, estado, carnet, numPlazas, medida);
+				minibus = new Minibus(matricula, precioDia, marca, descripcion, color, motor, cilindrada, fechaadq,
+						estado, carnet, numPlazas, medida);
 				buses.add(minibus);
 
 			}
@@ -557,7 +560,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public boolean deleteCar(Car car) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -579,12 +582,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean deleteVan(Van van) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -606,12 +609,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean deleteTruck(Truck truck) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -633,7 +636,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
@@ -660,12 +663,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean addCar(Car car) throws SQLException {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -675,16 +678,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, car.getMatricula());
 			pstmt.setDouble(2, car.getPrecioDia());
 			pstmt.setString(3, car.getMarca());
 			pstmt.setString(4, car.getDescripcion());
 			pstmt.setString(5, car.getColor());
 			pstmt.setString(6, car.getMotor());
-			if(car.getCilindrada() == null) {
+			if (car.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, car.getCilindrada());
 			}
 			pstmt.setDate(8, car.getFechaadq());
@@ -692,22 +695,20 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(car.getCarnet()));
 			pstmt.setInt(11, car.getNumPlazas());
 			pstmt.setInt(12, car.getNumPuertas());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} 
+		}
 
 		return eliminado;
-		
-	}
 
-	
+	}
 
 	@Override
 	public boolean addVan(Van van) throws SQLException {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -717,16 +718,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, van.getMatricula());
 			pstmt.setDouble(2, van.getPrecioDia());
 			pstmt.setString(3, van.getMarca());
 			pstmt.setString(4, van.getDescripcion());
 			pstmt.setString(5, van.getColor());
 			pstmt.setString(6, van.getMotor());
-			if(van.getCilindrada() == null) {
+			if (van.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, van.getCilindrada());
 			}
 			pstmt.setDate(8, van.getFechaadq());
@@ -734,20 +735,19 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(van.getCarnet()));
 			pstmt.setDouble(11, van.getMma());
 
-	
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} 
+		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean addTruck(Truck truck) throws SQLException {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -757,16 +757,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, truck.getMatricula());
 			pstmt.setDouble(2, truck.getPrecioDia());
 			pstmt.setString(3, truck.getMarca());
 			pstmt.setString(4, truck.getDescripcion());
 			pstmt.setString(5, truck.getColor());
 			pstmt.setString(6, truck.getMotor());
-			if(truck.getCilindrada() == null) {
+			if (truck.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, truck.getCilindrada());
 			}
 			pstmt.setDate(8, truck.getFechaadq());
@@ -774,20 +774,20 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(truck.getCarnet()));
 			pstmt.setInt(11, truck.getNumRuedas());
 			pstmt.setInt(12, truck.getMma());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} 
+		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean addBus(Minibus bus) throws SQLException {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -797,16 +797,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, bus.getMatricula());
 			pstmt.setDouble(2, bus.getPrecioDia());
 			pstmt.setString(3, bus.getMarca());
 			pstmt.setString(4, bus.getDescripcion());
 			pstmt.setString(5, bus.getColor());
 			pstmt.setString(6, bus.getMotor());
-			if(bus.getCilindrada() == null) {
+			if (bus.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, bus.getCilindrada());
 			}
 			pstmt.setDate(8, bus.getFechaadq());
@@ -814,17 +814,17 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(bus.getCarnet()));
 			pstmt.setInt(11, bus.getNumPlazas());
 			pstmt.setDouble(12, bus.getMedida());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} 
+		}
 
 		return eliminado;
-		
+
 	}
-	
+
 	@Override
 	public boolean editCar(Car car) {
 		boolean eliminado = false;
@@ -836,16 +836,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, car.getMatricula());
 			pstmt.setDouble(2, car.getPrecioDia());
 			pstmt.setString(3, car.getMarca());
 			pstmt.setString(4, car.getDescripcion());
 			pstmt.setString(5, car.getColor());
 			pstmt.setString(6, car.getMotor());
-			if(car.getCilindrada() == null) {
+			if (car.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, car.getCilindrada());
 			}
 			pstmt.setDate(8, car.getFechaadq());
@@ -853,22 +853,22 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(car.getCarnet()));
 			pstmt.setInt(11, car.getNumPlazas());
 			pstmt.setInt(12, car.getNumPuertas());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean editVan(Van van) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -878,16 +878,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, van.getMatricula());
 			pstmt.setDouble(2, van.getPrecioDia());
 			pstmt.setString(3, van.getMarca());
 			pstmt.setString(4, van.getDescripcion());
 			pstmt.setString(5, van.getColor());
 			pstmt.setString(6, van.getMotor());
-			if(van.getCilindrada() == null) {
+			if (van.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, van.getCilindrada());
 			}
 			pstmt.setDate(8, van.getFechaadq());
@@ -895,12 +895,11 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(van.getCarnet()));
 			pstmt.setDouble(11, van.getMma());
 
-	
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -910,7 +909,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public boolean editTruck(Truck truck) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -920,16 +919,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, truck.getMatricula());
 			pstmt.setDouble(2, truck.getPrecioDia());
 			pstmt.setString(3, truck.getMarca());
 			pstmt.setString(4, truck.getDescripcion());
 			pstmt.setString(5, truck.getColor());
 			pstmt.setString(6, truck.getMotor());
-			if(truck.getCilindrada() == null) {
+			if (truck.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, truck.getCilindrada());
 			}
 			pstmt.setDate(8, truck.getFechaadq());
@@ -937,7 +936,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(truck.getCarnet()));
 			pstmt.setInt(11, truck.getNumRuedas());
 			pstmt.setInt(12, truck.getMma());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
@@ -947,12 +946,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
 	public boolean editBus(Minibus bus) {
-		
+
 		boolean eliminado = false;
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -962,16 +961,16 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			PreparedStatement pstmt = con.prepareStatement(query);
-			
+
 			pstmt.setString(1, bus.getMatricula());
 			pstmt.setDouble(2, bus.getPrecioDia());
 			pstmt.setString(3, bus.getMarca());
 			pstmt.setString(4, bus.getDescripcion());
 			pstmt.setString(5, bus.getColor());
 			pstmt.setString(6, bus.getMotor());
-			if(bus.getCilindrada() == null) {
+			if (bus.getCilindrada() == null) {
 				pstmt.setNull(7, OracleTypes.NULL);
-			}else {
+			} else {
 				pstmt.setDouble(7, bus.getCilindrada());
 			}
 			pstmt.setDate(8, bus.getFechaadq());
@@ -979,7 +978,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 			pstmt.setString(10, String.valueOf(bus.getCarnet()));
 			pstmt.setInt(11, bus.getNumPlazas());
 			pstmt.setDouble(12, bus.getMedida());
-	
+
 			if (pstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
@@ -989,7 +988,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return eliminado;
-		
+
 	}
 
 	@Override
@@ -1018,7 +1017,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 	@Override
 	public ArrayList<Alquiler> getAlquileres() {
-		
+
 		ArrayList<Alquiler> alquileres = new ArrayList<Alquiler>();
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -1033,8 +1032,8 @@ public class OracleDataBase implements AlmacenDatosDB {
 
 			while (rs.next()) {
 
-				alquiler = new Alquiler(rs.getInt("IDALQUILER"), rs.getInt("IDFACTURA"),rs.getString("MATRICULA"), 
-						rs.getDate("FECHAINICIO"), rs.getDate("FECHAFIN"),rs.getDouble("PRECIO"));
+				alquiler = new Alquiler(rs.getInt("IDALQUILER"), rs.getInt("IDFACTURA"), rs.getString("MATRICULA"),
+						rs.getDate("FECHAINICIO"), rs.getDate("FECHAFIN"), rs.getDouble("PRECIO"));
 
 				alquileres.add(alquiler);
 
@@ -1046,12 +1045,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 		}
 
 		return alquileres;
-		
+
 	}
 
 	@Override
 	public ArrayList<Factura> getFacturas() throws ParseException {
-		
+
 		ArrayList<Factura> facturas = new ArrayList<Factura>();
 
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
@@ -1061,7 +1060,7 @@ public class OracleDataBase implements AlmacenDatosDB {
 		try (Connection con = ds.getConnection()) {
 
 			SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-			
+
 			CallableStatement cstmt = con.prepareCall(query);
 			cstmt.registerOutParameter(1, OracleTypes.REF_CURSOR);
 			cstmt.execute();
@@ -1069,26 +1068,23 @@ public class OracleDataBase implements AlmacenDatosDB {
 			ResultSet rs = (ResultSet) cstmt.getObject(1);
 
 			Factura factura;
-			
+
 			int idFactura;
 			Date fechaFac;
 			Double importeBase;
 			Double importeIva;
 			int clienteId;
-			
 
 			while (rs.next()) {
 
-				
 				idFactura = rs.getInt("IDFACTURA");
 				fechaFac = rs.getDate("FECHA");
 				importeBase = rs.getDouble("IMPORTEBASE");
 				importeIva = rs.getDouble("IMPORTEIVA");
 				clienteId = rs.getInt("CLIENTEID");
-				
-				factura = new Factura(idFactura,fechaFac,importeBase,importeIva,clienteId);
+
+				factura = new Factura(idFactura, fechaFac, importeBase, importeIva, clienteId);
 				facturas.add(factura);
-				
 
 			}
 
@@ -1096,12 +1092,12 @@ public class OracleDataBase implements AlmacenDatosDB {
 			e.printStackTrace();
 		}
 		return facturas;
-		
+
 	}
 
 	@Override
 	public boolean addAlquiler(Alquiler a, String dni) throws SQLException {
-		
+
 		boolean eliminado = false;
 		DataSource ds = MyDataSourceOracle.getOracleDataSource();
 
@@ -1113,20 +1109,138 @@ public class OracleDataBase implements AlmacenDatosDB {
 			cstmt.setObject(1, OracleTypes.INTEGER);
 			cstmt.setString(2, dni);
 			cstmt.setString(3, a.getMatricula());
-			cstmt.setNull(4, OracleTypes.NULL);
-			cstmt.setNull(5, OracleTypes.NULL);
+			cstmt.setObject(4, OracleTypes.INTEGER);
+			if (a.getIdFactura() == null) {
+				cstmt.setNull(5, OracleTypes.NULL);
+			} else {
+				cstmt.setInt(5, a.getIdFactura());
+			}
 			cstmt.setDate(6, a.getFechaInicio());
 			cstmt.setDate(7, a.getFechaFin());
-			
+
 			if (cstmt.executeUpdate() == 1) {
 				eliminado = true;
 			}
 
-		} 
+		}
 
 		return eliminado;
+
+	}
+
+	@Override
+	public boolean deleteFactura(Factura f) {
+
+		boolean eliminado = false;
 		
+		if(deleteAlquiler(f.getIdFactura())) {
+			
+			DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+			String query = "DELETE FROM FACTURA WHERE IDFACTURA = ?";
+
+			try (Connection con = ds.getConnection()) {
+
+				PreparedStatement pstmt = con.prepareStatement(query);
+
+				pstmt.setInt(1, f.getIdFactura());
+
+				if (pstmt.executeUpdate() == 1) {
+					eliminado = true;
+				}
+
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage() , "ERROR",
+						JOptionPane.ERROR_MESSAGE);
+			}
+			
+		}else {
+			JOptionPane.showMessageDialog(null, "ERROR AL ELIMINAR LOS ALQUILERES ", "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+		}
 		
+		return eliminado;
+
+	}
+
+	@Override
+	public boolean deleteAlquiler(int idFactura) {
+
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "DELETE FROM ALQUILER WHERE IDFACTURA = ?";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setInt(1, idFactura);
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "ERROR: " + e.getMessage() , "ERROR",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+		return eliminado;
+
+	}
+
+	@Override
+	public boolean facturaCobrada(int idFactura) {
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONALQUILER.facturaCobrada(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setInt(1, idFactura);
+			
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
+
+	}
+
+	@Override
+	public boolean deleteDetail(Alquiler a) {
+		
+		boolean eliminado = false;
+
+		DataSource ds = MyDataSourceOracle.getOracleDataSource();
+
+		String query = "{call GESTIONALQUILER.bajaAlquiler(?)}";
+
+		try (Connection con = ds.getConnection()) {
+
+			PreparedStatement pstmt = con.prepareStatement(query);
+
+			pstmt.setInt(1, a.getIdAlquiler());
+
+			if (pstmt.executeUpdate() == 1) {
+				eliminado = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return eliminado;
 	}
 
 }
