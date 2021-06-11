@@ -14,7 +14,7 @@ public class vistaPreferencias extends JInternalFrame {
 	private JTextField txtFieldDriver;
 	private JTextField txtFieldDireccion;
 	private JTextField txtFieldUsuario;
-	private JPasswordField passfieldContraseña;
+	private JPasswordField passfieldcontrasenya;
 	private JButton btnGuardar;
 
 
@@ -49,11 +49,11 @@ public class vistaPreferencias extends JInternalFrame {
 		getContentPane().add(txtFieldUsuario, "cell 3 5 2 1,growx");
 		txtFieldUsuario.setColumns(10);
 		
-		JLabel lblContrasea = new JLabel("Contraseña");
+		JLabel lblContrasea = new JLabel("contrasenya");
 		getContentPane().add(lblContrasea, "cell 1 7");
 		
-		passfieldContraseña = new JPasswordField();
-		getContentPane().add(passfieldContraseña, "cell 3 7 2 1,growx");
+		passfieldcontrasenya = new JPasswordField();
+		getContentPane().add(passfieldcontrasenya, "cell 3 7 2 1,growx");
 		
 		btnGuardar = new JButton("Save");
 		getContentPane().add(btnGuardar, "cell 0 9 5 1,alignx center");
@@ -75,8 +75,8 @@ public class vistaPreferencias extends JInternalFrame {
 	}
 
 
-	public JPasswordField getPassfieldContraseña() {
-		return passfieldContraseña;
+	public JPasswordField getPassfieldcontrasenya() {
+		return passfieldcontrasenya;
 	}
 
 	public JButton getBtnGuardar() {

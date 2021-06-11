@@ -321,7 +321,7 @@ public class Controlador implements ActionListener {
 
 		MyConfig.getInstance().setProperties(vistaPreferencias.getTxtFieldDriver().getText(),
 				vistaPreferencias.getTxtFieldDireccion().getText(), vistaPreferencias.getTxtFieldUsuario().getText(),
-				String.valueOf(vistaPreferencias.getPassfieldContraseña().getPassword()));
+				String.valueOf(vistaPreferencias.getPassfieldcontrasenya().getPassword()));
 
 		JOptionPane.showMessageDialog(null, "Saved Correctly", "Saved Correctly", JOptionPane.INFORMATION_MESSAGE);
 		vistaPreferencias.dispose();
@@ -397,7 +397,7 @@ public class Controlador implements ActionListener {
 		vistaPreferencias.getTxtFieldUsuario().setAction(action);
 		vistaPreferencias.getTxtFieldDireccion().setAction(action);
 		vistaPreferencias.getTxtFieldDriver().setAction(action);
-		vistaPreferencias.getPassfieldContraseña().setAction(action);
+		vistaPreferencias.getPassfieldcontrasenya().setAction(action);
 
 		vistaPreferencias.getBtnGuardar().addActionListener(this);
 		vistaPreferencias.getBtnGuardar().setActionCommand("Save Preferences");
@@ -409,7 +409,7 @@ public class Controlador implements ActionListener {
 		vistaPreferencias.getTxtFieldDriver().setText(MyConfig.getInstance().getDriver());
 		vistaPreferencias.getTxtFieldDireccion().setText(MyConfig.getInstance().getURL());
 		vistaPreferencias.getTxtFieldUsuario().setText(MyConfig.getInstance().getNombre());
-		vistaPreferencias.getPassfieldContraseña().setText(MyConfig.getInstance().getPassword());
+		vistaPreferencias.getPassfieldcontrasenya().setText(MyConfig.getInstance().getPassword());
 
 	}
 
